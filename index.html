@@ -253,6 +253,7 @@
   </header>
   <!-- === Swagger UI === -->
   <div id="swagger-ui"></div>
+
   <div class="notes" style="max-width:1250px; margin: 30px auto;">
     <strong>Observações rápidas</strong>
     <ul>
@@ -264,12 +265,23 @@
       <li><b>Token Bearer:</b> válido por até <code>7 dias</code></li>
     </ul>
 
-    <a href="Limber_API_vendas.json" download="Limber-API.postman_collection.json" class="download-btn">
-      <img src="https://www.vectorlogo.zone/logos/getpostman/getpostman-icon.svg" alt="Postman"
-        style="height:20px;vertical-align:middle;margin-right:6px;">
-      Baixar coleção Postman
+    <a href="Limber_API_vendas.json" download="Limber_API_vendas.json" class="download-btn" style="display:inline-flex;align-items:center;gap:8px;padding:10px 16px;background:#f6f6f6;border:1px solid #ccc;
+            border-radius:8px;text-decoration:none;color:#333;font-weight:500;transition:background 0.2s;">
+      <img src="https://www.vectorlogo.zone/logos/getpostman/getpostman-icon.svg" alt="Postman" style="height:20px;">
+      <img src="https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/insomnia.svg" alt="Insomnia"
+        style="height:20px;">
+      <img src="https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/bruno.svg" alt="Bruno"
+        style="height:20px;">
+      <span>Baixar coleção JSON (Postman / Insomnia / Bruno)</span>
     </a>
+
+    <p style="margin-top:10px;font-size:14px;color:#555;">
+      💡 O arquivo JSON pode ser importado diretamente em ferramentas como <b>Postman</b>, <b>Insomnia</b> ou
+      <b>Bruno</b>
+      para testar e explorar os endpoints da API.
+    </p>
   </div>
+
   <footer>
     <strong>Erros comuns</strong><br>
     • <code>401 expired token</code> — renovar token (re-autenticar).<br>
