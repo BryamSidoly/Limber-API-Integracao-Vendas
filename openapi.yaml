@@ -22,11 +22,12 @@ info:
         - **7.2.1** – Pagamento manual
         - **7.2.2** – Pagamento na adquirente
         - **7.2.3** – Gerar link de pagameto
-    - **8** – Pedido de cancelamento
-    - **8** – Cancelamento:
-      - **8.1** – Cancelamento manual
-      - **8.2** – Cancelamentona adquirente
-      - **8.2.1** – Verificar cancelamento na adquirente
+    - **8** - Remarcação
+    - **9** – Pedido de cancelamento
+    - **10** – Cancelamento:
+      - **10.1** – Cancelamento manual
+      - **10.2** – Cancelamentona adquirente
+      - **10.2.1** – Verificar cancelamento na adquirente
 
 servers: 
 - url: https://testescard.limbersoftware.com.br
