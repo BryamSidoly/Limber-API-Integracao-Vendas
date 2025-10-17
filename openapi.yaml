@@ -11,7 +11,7 @@ info:
 
     ## Fluxo:
     - **1** – Autenticação
-    - **2** – Consulta SKU pelo idParceiro do Auth
+    - **2** – Consulta SKU
     - **3** – Consulta de calendario (Geral ou do Ingresso)
     - **4** – Consulta de estoque do SKU (Estoque ou Estoque agrupado)
     - **5** – Consulta de preço do SKU
