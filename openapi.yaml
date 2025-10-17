@@ -696,28 +696,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AuthResponse'
-              examples:
-                sucesso:
-                  value:
-                    codigo: 559
-                    nivel: 30
-                    nome: "API - TESTES - RESERVAS"
-                    usuario: "apireservas"
-                    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                    email: "apireservas"
-                    parceiros:
-                      - idparceiro: 123
-                        nomeparceiro: "API - Nome parceiro"
-                        tipoparceiro: "IA"
-                        pedido_de_cancelamento: true
-                        visualiza_relatorios_venda: 2
-                        altera_cadastro: true
-                        sac: false
-                        integra_venda: true
-                        desct_central_vendas: null
-                        administrador: true
-                        remarcacao: true
-                        cancelamento_de_venda: true
         '400':
           $ref: '#/components/responses/BadRequest'
 
@@ -753,7 +731,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/SKUItem'
-              examples:
                 exemplo:
                   summary: Exemplo de resposta com múltiplos SKUs
                   value:
@@ -989,7 +966,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/DisponibilidadeCalendarioItem'
-              examples:
                 exemplo:
                   value:
                     - data: "AAAA-MM-DDTHH:MM:SS.000Z"
@@ -1119,7 +1095,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/DisponibilidadeEstoqueItem'
-              examples:
                 exemplo:
                   value:
                     - temporada: 2
@@ -1282,7 +1257,6 @@ paths:
                             type: string
                           valor:
                             type: number
-              examples:
                 exemplo:
                   value:
                     - idCategoria: 123456
@@ -1330,7 +1304,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ReservaResponse'
-              examples:
                 sucesso:
                   value:
                     localizador: "LMBR-20251001-ABC123"
@@ -1389,7 +1362,6 @@ paths:
                   type: string
                 status:
                   type: string
-            examples:
               sucesso:
                 value:
                   localizador: "LB99999999"
@@ -1561,7 +1533,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/QrCodeReadResponse'
-              examples:
                 exemplo:
                   value:
                     qrCode: "LMBR_393365650"
@@ -1611,7 +1582,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/UtilizacaoItem'
-              examples:
                 exemplo:
                   value:
                     - codigo: 1234
