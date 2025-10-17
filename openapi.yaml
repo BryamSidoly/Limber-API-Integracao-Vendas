@@ -1,10 +1,10 @@
-openapi: 3.0.1
-info:
-  title: Limber Cross API - Integração de Vendas (Pública)
-  version: "2.0"
-servers:
-  - url: https://testescard.limbersoftware.com.br
-    description: Ambiente de testes (padrão)
+openapi: 3.0.1 
+info: 
+  title: Limber Cross API - Integração de Vendas (Pública) 
+  version: "2.0" 
+servers: 
+- url: https://testescard.limbersoftware.com.br
+  description: Ambiente de testes (padrão)
 
 tags:
   - name: Autenticação
@@ -1245,6 +1245,80 @@ paths:
                           categoria: "Adulto"
         '400':
           $ref: '#/components/responses/BadRequest'
+
+  /api/cross/pedidoCancelamento/{{idVenda}}:
+    post:
+      tags:
+        - Cancelamento
+      summary: Pedido de Cancelamento
+      security:
+        - bearerAuth: []
+      description: |
+        ETAPA 1: Faz o pedido de cancelamento de um ou mais itens dentro da mesma venda.
+        Pode ser utilizado mais de uma vez apenas com ingressos que estão aprovados.
+        Não pode ser feito com itens lidos (qrCodes).
+
+        *Cada pedido de cancelamento gera uma Sequência (seq) com os itens da venda dentro.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                motivo:
+                  type: string
+                  example: "Solicitado pelo cliente"
+                itens:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      sequencia:
+                        type: integer
+                        example: 1
+                gera_credito: 
+                  type: string
+                  example: false
+                pagamentos:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      sequencia:
+                        type: integer
+                        example: 1
+            
+      responses:
+        '200':
+          description: Pedido de cancelamento realizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  venda:
+                    type: number
+                    example: 48831772
+                  itensAtualizados:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        sequencia:
+                          type: number
+                          example: 1
+                        cancelamentos_codigo:
+                          type: array
+                          items:
+                            type: number
+                            example: 1
+
+            
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedInvalid'
 
 externalDocs:
   description: Informações de erros e uso
