@@ -66,9 +66,11 @@ components:
       properties:
         usuario:
           type: string
+          description: Usuário gerado pela Limber
           example: "Limber"
         senha:
           type: string
+          description: Senha gerada pela Limber
           example: "Software"
 
     AuthResponse:
@@ -77,20 +79,26 @@ components:
         codigo:
           type: integer
           example: 559
+          description: Id do usuário
         nivel:
           type: integer
           example: 30
+          description: Nivel de acesso do usuario (fixo)
         nome:
           type: string
-          example: "API - TESTES - RESERVAS"
+          description: Nome do integrador
+          example: "API ABCD"
         usuario:
           type: string
+          description: Usuário de Login
           example: "apireservas"
         token:
           type: string
+          description: Berer token para usar nas outras requisições
           example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
         email:
           type: string
+          description: E-mail cadastrado
           example: "apireservas"
         parceiros:
           type: array
@@ -99,38 +107,50 @@ components:
             properties:
               idparceiro:
                 type: integer
+                description: Id utilizado nas outras requisições
                 example: 2402
               nomeparceiro:
                 type: string
-                example: "Ecommerce - API - Limber"
+                description: Nome do estabelecimeto do integrador
+                example: "API - Limber"
               tipoparceiro:
                 type: string
-                example: "EC"
+                description: Não utilizado
+                example: "IA"
               pedido_de_cancelamento:
                 type: boolean
+                description: Não utilizado
                 example: false
               visualiza_relatorios_venda:
                 type: integer
+                description: Não utilizado
                 example: 0
               altera_cadastro:
                 type: boolean
+                description: Não utilizado
                 example: false
               sac:
                 type: boolean
+                description: Não utilizado
                 example: false
               integra_venda:
                 type: boolean
+                description: Não utilizado
                 example: false
               desct_central_vendas:
                 type: [string, "null"]
+                description: Não utilizado
                 example: null
               administrador:
                 type: boolean
+                description: Não utilizado
                 example: false
               remarcacao:
                 type: boolean
+                description: Se o estabelecimento pode fazer remarcação
                 example: true
               cancelamento_de_venda:
+                description: Se estabelecimento pode fazer remarcação
                 type: boolean
                 example: false
 
@@ -658,7 +678,6 @@ components:
             $ref: '#/components/schemas/Error'
 
 paths:
-
   /api/auth:
     post:
       tags:
@@ -670,9 +689,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/AuthRequest'
-            example:
-              usuario: "Limber"
-              senha: "Software"
       responses:
         '200':
           description: Autenticação bem-sucedida (utilize esse token para as outras requisições)
@@ -1691,11 +1707,10 @@ paths:
       security:
         - bearerAuth: []
       description: |
-        ETAPA 1: Faz o pedido de cancelamento de um ou mais itens dentro da mesma venda.
-        Pode ser utilizado mais de uma vez apenas com ingressos que estão aprovados.
-        Não pode ser feito com itens lidos (qrCodes).
+        *PRECISA PASSAR PELA ETAPA 1
 
-        *Cada pedido de cancelamento gera uma Sequência (seq) com os itens da venda dentro.
+        ETAPA: 2.1
+
       requestBody:
         required: true
         content:
@@ -1759,11 +1774,10 @@ paths:
         security:
           - bearerAuth: []
         description: |
-          ETAPA 1: Faz o pedido de cancelamento de um ou mais itens dentro da mesma venda.
-          Pode ser utilizado mais de uma vez apenas com ingressos que estão aprovados.
-          Não pode ser feito com itens lidos (qrCodes).
+          *PRECISA PASSAR PELA ETAPA 1
 
-          *Cada pedido de cancelamento gera uma Sequência (seq) com os itens da venda dentro.
+          ETAPA: 2.2
+
         requestBody:
           required: true
           content:
@@ -1832,11 +1846,9 @@ paths:
         security:
           - bearerAuth: []
         description: |
-          ETAPA 1: Faz o pedido de cancelamento de um ou mais itens dentro da mesma venda.
-          Pode ser utilizado mais de uma vez apenas com ingressos que estão aprovados.
-          Não pode ser feito com itens lidos (qrCodes).
+          ETAPA 3: 
 
-          *Cada pedido de cancelamento gera uma Sequência (seq) com os itens da venda dentro.
+
         requestBody:
           required: true
           content:
