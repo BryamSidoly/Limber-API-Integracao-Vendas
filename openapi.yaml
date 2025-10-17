@@ -3,7 +3,7 @@ info:
   title: Limber Cross API - Integração de Vendas (Pública)
   version: "2.0"
   description: |
-    Esta API permite a integração de vendas com a plataforma Limber via API.
+    A API permite a integração de vendas com a plataforma Limber via API.
 
     ## Informações Gerais
     - A documentação esta referenciada para testes. Em produção troque "testescard" por "card".
@@ -51,7 +51,6 @@ components:
       bearerFormat: JWT
 
   schemas:
-
     Error:
       type: object
       properties:
@@ -140,13 +139,74 @@ components:
       properties:
         idCategoria:
           type: integer
+          example: 3831
         nomeCategoria:
           type: string
+          example: "API - Adulto 2222"
         descricaoCategoria:
           type: string
           nullable: true
+          example: null
+        validaIdade:
+          type: string
+          nullable: true
+          example: "S"
+        idadeInicial:
+          type: integer
+          nullable: true
+          example: 17
+        idadeFinal:
+          type: integer
+          nullable: true
+          example: null
+        privativo:
+          type: string
+          nullable: true
+          example: "N"
+        aPartirDe:
+          type: string
+          nullable: true
+          example: "N"
         valorUnitario:
           type: number
+          example: 0.11
+        ordem:
+          type: integer
+          nullable: true
+          example: 0
+        ocupaAssento:
+          type: string
+          nullable: true
+          example: "N"
+        moradorLocal:
+          type: boolean
+          example: false
+        paises:
+          type: array
+          items:
+            type: integer
+          example: [1, 12, 178]
+        convenios:
+          type: array
+          items:
+            type: object
+            properties:
+              convenio:
+                type: integer
+                example: 1
+              nome:
+                type: string
+                example: "Criança"
+              descricao:
+                type: string
+                nullable: true
+                example: null
+              coletaObs:
+                type: boolean
+                example: false
+        coletaFoto:
+          type: boolean
+          example: true
         receitas:
           type: array
           items:
@@ -154,33 +214,154 @@ components:
             properties:
               idReceita:
                 type: integer
+                example: 3424
               nomeReceita:
                 type: string
+                example: "Limber - API - Visitantes"
+              estabelec:
+                type: integer
+                example: 1349
+              nomeEstabelec:
+                type: string
+                example: "Bilheteria - API - Limber"
               valor:
                 type: number
+                example: 0.11
               valorContribFundo:
                 type: number
                 nullable: true
+                example: null
+              evento:
+                type: boolean
+                example: false
+              dataEvento:
+                type: string
+                format: date-time
+                nullable: true
+                example: null
+              dataIniCalendario:
+                type: string
+                format: date-time
+                nullable: true
+                example: null
+              ordemReceita:
+                type: integer
+                example: 0
 
     SKUItem:
       type: object
       properties:
         sku:
           type: integer
+          example: 4669
         nome:
           type: string
+          example: "Acesso ao Parque - Completo"
         slug:
           type: string
+          example: "acesso-ao-parque"
         ativo:
           type: string
+          example: "S"
+        perfil:
+          type: integer
+          example: 556
+        qtdMaxIngressos:
+          type: integer
+          nullable: true
+          example: null
+        qtdMinIngressos:
+          type: integer
+          nullable: true
+          example: null
+        qtdMaxIngressosTurismo:
+          type: integer
+          nullable: true
+          example: null
+        qtdMinIngressosTurismo:
+          type: integer
+          nullable: true
+          example: null
+        qtdMaxIngTotalCarrinho:
+          type: integer
+          nullable: true
+          example: null
+        qtdMinIngTotalCarrinho:
+          type: integer
+          nullable: true
+          example: null
+        configPagamento:
+          type: integer
+          example: 61
+        metodosPag:
+          type: array
+          items:
+            type: string
+          example: ["CARTAO","A FATURAR","PIX","DINHEIRO"]
+        permiteInfoVisitanteDepois:
+          type: string
+          example: "S"
+        diasLimiteParaVisitantes:
+          type: integer
+          example: 1
         descricao:
           type: string
-          nullable: true
+          example: "Desfrute de um evento emocionante com nosso ingresso exclusivo. Entretenimento de alta qualidade, atmosfera vibrante e experiências únicas esperam por você."
+        textoImpressao:
+          type: string
+          example: "Esse ingresso é valido por pessoa, cada qr code deve ser validado individualmente"
+        textoImpressaoHorario:
+          type: string
+          example: "Semana: 08:00 as 12 e 13:00 as 18\nFim de semana: Das 10:00 as 19:00"
+        estabelecCad:
+          type: integer
+          example: 1349
         prefixoQrcode:
           type: string
-          nullable: true
+          example: "API"
         controlaHorarios:
           type: string
+          example: "N"
+        controleDisp:
+          type: string
+          example: "V"
+        habilitaValorZerado:
+          type: string
+          example: "S"
+        consultaPrecosSazonais:
+          type: string
+          example: "S"
+        mostraLabelAPartirDe:
+          type: string
+          example: "S"
+        mostraHorarioFinal:
+          type: string
+          example: "S"
+        mostraVagasDisp:
+          type: string
+          example: "S"
+        mostraHorEsgotados:
+          type: string
+          example: "S"
+        coletaDadosVisitantes:
+          type: array
+          items:
+            type: integer
+          example: [2,4,6,8,10,12,14,16]
+        coletaDadosVisitantesMoradorLocal:
+          type: array
+          items:
+            type: integer
+          example: [2,4]
+        menorIdadeNecessitaAceiteResponsavel:
+          type: boolean
+          example: true
+        solicitaContatoEmergencia:
+          type: boolean
+          example: true
+        _gerarQrCode:
+          type: boolean
+          example: true
         categorias:
           type: array
           items:
@@ -192,12 +373,16 @@ components:
             properties:
               urlImg:
                 type: string
+                example: "https://cdntestes.limbersoftware.com.br/img/bilhetes/4669/Vd2EPDCCzE.webp"
               mostrarGaleria:
                 type: boolean
+                example: true
               mostrarHome:
                 type: boolean
+                example: true
               vibrantColor:
                 type: string
+                example: "#7f7f7f"
         locaisEmbarque:
           type: array
           items:
@@ -205,10 +390,36 @@ components:
             properties:
               localEmbarque:
                 type: integer
-              nomeLocalEmbarque:
-                type: string
+                example: 2
               descricao:
                 type: string
+                example: "Aberta 24h"
+              confirmaCredenciamento:
+                type: string
+                example: "N"
+              nomeLocalEmbarque:
+                type: string
+                example: "Portao Principal"
+              idReceita:
+                type: integer
+                example: 3424
+        sessoes:
+          type: array
+          items:
+            type: object
+            properties:
+              nome:
+                type: string
+                example: "Sessao principal"
+              descricao:
+                type: string
+                example: "2 em 2 horas"
+              idReceita:
+                type: integer
+                example: 3424
+              idSessao:
+                type: integer
+                example: 1
         temporadas:
           type: array
           items:
@@ -216,10 +427,16 @@ components:
             properties:
               temporada:
                 type: integer
+                example: 1
               nome:
                 type: string
+                example: "Alta Temporada"
+              preco:
+                type: number
+                example: 20
               corCalendario:
                 type: string
+                example: "#ff0000"
 
     DisponibilidadeCalendarioItem:
       type: object
@@ -537,90 +754,180 @@ paths:
                       slug: "atrativos"
                       ativo: "S"
                       perfil: 556
+                      qtdMaxIngressos: null
+                      qtdMinIngressos: null
+                      qtdMaxIngressosTurismo: null
+                      qtdMinIngressosTurismo: null
+                      qtdMaxIngTotalCarrinho: null
+                      qtdMinIngTotalCarrinho: null
+                      configPagamento: null
                       metodosPag:
                         - CARTAO
                         - A FATURAR
                         - PIX
                         - DINHEIRO
+                      permiteInfoVisitanteDepois: null
+                      diasLimiteParaVisitantes: null
                       descricao: "Desfrute de um evento emocionante com nosso ingresso exclusivo..."
+                      textoImpressao: null
+                      textoImpressaoHorario: null
+                      estabelecCad: null
                       prefixoQrcode: "API"
                       controlaHorarios: "S"
+                      controleDisp: null
+                      controlaIdiomaHorarios: null
+                      habilitaValorZerado: null
+                      cobrancaFundo: null
+                      cobrancaFundoComecaMarcado: null
+                      nomeFundo: null
+                      consultaPrecosSazonais: null
+                      vendaSemDataVisita: null
+                      multiplasDatasVisita: null
+                      isentarUltimoDiaReserva: null
+                      maxDiasVisita: null
+                      minDiasVisita: null
+                      mostraLabelAPartirDe: null
+                      mostraHorarioFinal: null
+                      mostraVagasDisp: null
+                      mostraHorEsgotados: null
+                      nomeTermoDeAceite: null
+                      pathTermoDeAceite: null
+                      habilitaBilheteVinculado: null
+                      unicoNoCarrinho: null
+                      linkExterno: null
+                      textoEmbarque: null
+                      textoEmbarqueVoucher: null
+                      textoDataVis: null
+                      textoDataVisVoucher: null
+                      textoHoraVis: null
+                      textoHoraVisVoucher: null
+                      textoPoltrona: null
+                      textoVagao: null
+                      textoSessaoImp: null
+                      textoSessaoEc: null
+                      textoEscolhaCategorias: null
+                      duracao: null
+                      bloquearPorDuracao: "N"
+                      idiomas: []
+                      consultarDispOffline: "N"
+                      dataLimiteConsultarDisp: null
+                      tempoAntecedencia: 0
+                      escalaAutomaticaAssentos: null
+                      habilitaVendaDiasCorridos: "N"
+                      consultarPrecosCard: "S"
+                      consultarDispCard: "S"
+                      permiteLeiturasMesmoDia: "N"
+                      qtdDiasCorridos: null
+                      limiteLeiturasDiasCorridos: null
+                      dataAlertaInit: null
+                      dataAlertaFim: null
+                      alertaInic: null
+                      alertaInicCor: null
+                      alertaInicDesc: null
+                      desativaVendasBi: "N"
+                      utilizaMapaSessoes: null
+                      dataHoraVendaIniUTC: null
+                      formatedDataHoraVendaIni: null
+                      dataHoraVendaFimUTC: null
+                      formatedDataHoraVendaFim: null
+                      mostraPrecoCalendario: "S"
+                      limiteDiasParaRemarcacao: null
+                      imprimeCanhoto: null
+                      imprimeValorBilhete: null
+                      mostraNomeHome: null
+                      habilitaPaisEstado: null
+                      habilitaCEP: null
+                      coletaDadosVisitantes: []
+                      coletaDadosVisitantesMoradorLocal: []
+                      coletaApanhe: 0
+                      coletaObservacao: 0
+                      menorIdadeNecessitaAceiteResponsavel: null
+                      solicitaContatoEmergencia: null
+                      solicitaContatoEmergenciaTick: null
+                      _gerarQrCodeCripto: false
+                      _gerarQrCode: true
+                      _utilizaQrCode: true
+                      _chaveQrCode: null
+                      _grupoLotes: null
+                      _preVendaGrupo: null
+                      _preVendaDataIni: null
+                      _preVendaDataFim: null
+                      _preVendaHoraIni: null
+                      _preVendaHoraFim: null
                       categorias:
                         - idCategoria: 3831
                           nomeCategoria: "API - Adulto 2222"
+                          validaIdade: null
+                          idadeInicial: null
+                          idadeFinal: null
+                          privativo: null
+                          aPartirDe: null
+                          descricaoCategoria: null
                           valorUnitario: 15
+                          ordem: null
+                          ocupaAssento: null
+                          moradorLocal: false
+                          paises: []
+                          convenios: []
+                          coletaFoto: null
                           receitas:
                             - idReceita: 3419
                               nomeReceita: "Limber - API - Atrativos"
+                              estabelec: null
+                              nomeEstabelec: null
                               valor: 15
+                              valorContribFundo: null
+                              evento: null
+                              dataEvento: null
+                              dataIniCalendario: null
+                              ordemReceita: null
                         - idCategoria: 3832
                           nomeCategoria: "API - Meia Entrada 222"
+                          validaIdade: null
+                          idadeInicial: null
+                          idadeFinal: null
+                          privativo: null
+                          aPartirDe: null
+                          descricaoCategoria: null
                           valorUnitario: 7
+                          ordem: null
+                          ocupaAssento: null
+                          moradorLocal: false
+                          paises: []
+                          convenios: []
+                          coletaFoto: null
                           receitas:
                             - idReceita: 3419
                               nomeReceita: "Limber - API - Atrativos"
+                              estabelec: null
+                              nomeEstabelec: null
                               valor: 7
+                              valorContribFundo: null
+                              evento: null
+                              dataEvento: null
+                              dataIniCalendario: null
+                              ordemReceita: null
                       imagens:
                         - urlImg: "https://cdntestes.limbersoftware.com.br/img/bilhetes/4671/8xwN6VlWCP.webp"
+                          resolucao: null
                           mostrarGaleria: true
                           mostrarHome: true
+                          linkVideo: null
                           vibrantColor: "#7f7f7f"
+                      locaisEmbarque: []
+                      sessoes: []
+                      paises: []
+                      blocosDeTexto: []
                       temporadas:
                         - temporada: 1
+                          tipoReceita: null
+                          tipo_receita: null
                           nome: "Disponível"
+                          preco: null
                           corCalendario: "#37ff00"
-                    - sku: 4669
-                      nome: "Acesso ao Parque - Completo"
-                      ativo: "S"
-                      controlaHorarios: "N"
-                      categorias:
-                        - idCategoria: 3831
-                          nomeCategoria: "API - Adulto 2222"
-                          valorUnitario: 0.11
-                          receitas:
-                            - idReceita: 3424
-                              nomeReceita: "Limber - API - Visitantes"
-                              valor: 0.11
-                        - idCategoria: 3832
-                          nomeCategoria: "API - Meia Entrada 222"
-                          valorUnitario: 10
-                          receitas:
-                            - idReceita: 3424
-                              nomeReceita: "Limber - API - Visitantes"
-                              valor: 10
-                      locaisEmbarque:
-                        - localEmbarque: 2
-                          nomeLocalEmbarque: "Portao Principal"
-                          descricao: "Aberta 24h"
-                        - localEmbarque: 1
-                          nomeLocalEmbarque: "Entrada Norte"
-                          descricao: "Aberto apenas em horário comercial"
-                      temporadas:
-                        - temporada: 1
-                          nome: "Alta Temporada"
-                          corCalendario: "#ff0000"
-                        - temporada: 2
-                          nome: "Baixa Temporada"
-                          corCalendario: "#00d5ff"
-                    - sku: 4670
-                      nome: "Acesso ao Parque - Simples"
-                      ativo: "S"
-                      controlaHorarios: "N"
-                      categorias:
-                        - idCategoria: 3831
-                          nomeCategoria: "API - Adulto 2222"
-                          valorUnitario: 0.11
-                        - idCategoria: 3832
-                          nomeCategoria: "API - Meia Entrada 222"
-                          valorUnitario: 10
-                      imagens:
-                        - urlImg: "https://cdntestes.limbersoftware.com.br/img/bilhetes/4670/TUVfvGSEdn.webp"
-                          mostrarGaleria: true
-                          mostrarHome: true
-                      temporadas:
-                        - temporada: 1
-                          nome: "Disponível"
-                          corCalendario: "#ff0000"
+                          cor_calendario: "#37ff00"
+                      bilhetesVinculados: []
+
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
