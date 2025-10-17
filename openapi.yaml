@@ -487,11 +487,11 @@ components:
         horaembarqueinicial:
           type: string
           format: date-time
-          example: "1970-01-01T11:20:00.000Z"
+          example: "AAAA-MM-DDTHH:MM:SS.000Z"
         horaembarquefinal:
           type: string
           format: date-time
-          example: "1970-01-01T11:25:00.000Z"
+          example: "AAAA-MM-DDTHH:MM:SS.000Z"
         disponivel:
           type: integer
           example: 36
@@ -500,7 +500,7 @@ components:
           example: "<descrição da vaga>"
         idiomas:
           type: string
-          example: "Português,Inglês"
+          example: "Português"
 
     ReservaItem:
       type: object
@@ -560,18 +560,10 @@ components:
       properties:
         localizador:
           type: string
-          example: "LMBR-20251001-ABC123"
-        validade:
+          example: " LB123456789"
+        idVenda:
           type: string
-          format: date-time
-          example: "2025-10-01T12:00:00.000"
-        totalLiquido:
-          type: number
-          example: 100.5
-        ingressos:
-          type: array
-          items:
-            $ref: '#/components/schemas/ReservaItem'
+          example: 123456789
 
     QrCodeReadResponse:
       type: object
@@ -734,8 +726,8 @@ paths:
                   type: integer
                   example: 123
                 sku:
-                  type: string
-                  example: "0"
+                  type: number
+                  example: 0
       responses:
         '200':
           description: Lista de SKUs disponíveis (array)
@@ -984,22 +976,24 @@ paths:
               examples:
                 exemplo:
                   value:
-                    - data: "2019-04-01T00:00:00.000Z"
+                    - data: "AAAA-MM-DDTHH:MM:SS.000Z"
                       temporada: 1
-                      disponivel: 7
+                      disponivel: 100
                       locaisEmbarque: []
                       corTemporada: "#37ff00"
                       nomeTemporada: "Disponivel"
                       altaProcura: false
-                    - data: "2019-04-02T00:00:00.000Z"
+                    - data: "AAAA-MM-DDTHH:MM:SS.000Z"
                       temporada: 1
-                      disponivel: 10
+                      disponivel: 1000
                       locaisEmbarque: []
                       corTemporada: "#37ff00"
                       nomeTemporada: "Disponivel"
                       altaProcura: false
         '400':
           $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/response/UnauthorizedExpired'
 
   /api/cross/consulta/disponibilidade/calendario/geral:
     post:
@@ -1096,9 +1090,9 @@ paths:
                   type: integer
                   nullable: true
             example:
-              data: "2019-04-01"
-              sku: 123456
-              idParceiro: 0
+              data: "AAAA-MM-DD"
+              sku: 1234
+              idParceiro: 123
               meioVenda: "WEB"
       responses:
         '200':
@@ -1156,8 +1150,8 @@ paths:
                 sessao:
                   type: integer
             example:
-              data: "2019-04-01"
-              sku: 123456
+              data: "AAAA-MM-DD"
+              sku: 1234
               idParceiro: 0
               meiovenda: "WEB"
       responses:
@@ -1223,8 +1217,8 @@ paths:
                 sessao:
                   type: integer
             example:
-              data: "2019-04-01T00:00:00.000Z"
-              sku: 123456
+              data: "AAAA-MM-DDTHH:MM:SS.000Z"
+              sku: 1234
               idparceiro: 0
               meioVenda: "WEB"
       responses:
@@ -1291,7 +1285,7 @@ paths:
               titularEmail: "joao@example.com"
               ingressos:
                 - seq: 1
-                  sku: 123456
+                  sku: 12345
                   idCategoria: 9999
                   valorUnitario: 111.11
                   qrCode: "SFTE_0001"
@@ -1380,6 +1374,12 @@ paths:
         - bearerAuth: []
       description: |
         Confirma uma reserva e registra a venda. É necessário ter um localizador válido.
+        
+        ### Código da forma de pagamento:
+        - **1** - 'CARTAO'
+        - **2** - 'A FATURAR'
+        - **3** - 'PIX'
+        - **4** - 'DINHEIRO'
       requestBody:
         required: true
         content:
@@ -1389,27 +1389,37 @@ paths:
               properties:
                 localizador:
                   type: string
+                  example: LB03215488
                 idParceiro:
                   type: integer
+                  example: 123
                 formaPag:
                   type: integer
+                  example: 1
                 cartaoBandeira:
                   type: string
+                  example: MASTERCARD
                 cartaoNSU:
                   type: integer
+                  example: 12345678
                 cartaoAutorizacao:
                   type: string
+                  example: AUTH1234
                 parcelas:
                   type: integer
+                  example: 3
                 comprovantePagamento:
                   type: string
+                  example: abcD1234
                 dataHoraAutorizacao:
                   type: string
                   format: date-time
+                  example: AAAA-MM-DDTHHH:MM:SS.000Z
               required:
                 - localizador
                 - idParceiro
                 - formaPag
+
       responses:
         '200':
           description: Reserva confirmada e transformada em venda
@@ -1421,6 +1431,7 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/UnauthorizedInvalid'
+
 
   /api/cross/remarcacao:
     post:
