@@ -1187,7 +1187,7 @@ paths:
         '401':
           $ref: '#/components/responses/UnauthorizedInvalid'
 
-  /api/cross/leitura/qrCode/{QrCode}:
+  /api/cross/leitura/qrCode/{{QrCode}}:
     get:
       tags:
         - Leitura/Utilização

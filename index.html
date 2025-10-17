@@ -12,8 +12,8 @@
   <style>
     /* === Variáveis de cores === */
     :root {
-      --brand-primary: #5b0097;
-      --brand-secondary: #ae00ff;
+      --brand-primary: #310035;
+      --brand-secondary: #7100a5;
       --brand-accent: #f97316;
       --bg-light: #f5f7fa;
       --card-bg: #ffffff;
@@ -49,18 +49,23 @@
     }
 
     /* === Header === */
-    header {
-      background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
-      color: white;
-      padding: 1.8rem 2.5rem;
-      box-shadow: 0 4px 16px var(--shadow-dark);
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      flex-wrap: wrap;
-      border-bottom-left-radius: var(--border-radius);
-      border-bottom-right-radius: var(--border-radius);
-    }
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+  color: white;
+  padding: 0.6rem 1.5rem; 
+  box-shadow: 0 2px 10px var(--shadow-dark);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
 
     header img {
       height: 50px;
