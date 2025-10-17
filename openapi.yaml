@@ -16,12 +16,12 @@ info:
     - **4** – Consulta de estoque do SKU (Estoque ou Estoque agrupado)
     - **5** – Consulta de preço do SKU
     - **6** – Reserva
-    - **7** – Confirmação(Pagamento)/Inutlização:
-      - **7.1** – Inutlização
+    - **7** – Confirmação (Pagamento/Inutlização):
+      - **7.1** – Inutilização
       - **7.2** – Confirmação:
         - **7.2.1** – Pagamento manual
         - **7.2.2** – Pagamento na adquirente
-        - **7.2.3** – Gerar link de agameto
+        - **7.2.3** – Gerar link de pagameto
     - **8** – Pedido de cancelamento
     - **8** – Cancelamento:
       - **8.1** – Cancelamento manual
