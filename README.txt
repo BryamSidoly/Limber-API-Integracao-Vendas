@@ -1,4 +1,4 @@
-Limber Cross API - Swagger UI (gerado)
+Limber Cross API - Swagger
 =====================================
 
 Como usar:
