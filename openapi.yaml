@@ -6,7 +6,7 @@ info:
     Esta API permite a integração de vendas com a plataforma Limber via API.
 
     ## Informações Gerais
-    - Esta documentação esta referenciada para testes. Para produção troque "testescard" por "card"
+    - A documentação esta referenciada para testes. Em produção troque "testescard" por "card".
     - Todos os endpoints (exceto autenticação) exigem um token JWT válido no cabeçalho `Authorization: Bearer {token}`.
 
     ## Fluxo:
