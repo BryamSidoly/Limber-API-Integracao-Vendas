@@ -227,46 +227,68 @@ components:
         coletaFoto:
           type: boolean
           example: true
-        receitas:
-          type: array
-          items:
-            type: object
-            properties:
-              idReceita:
-                type: integer
-                example: 3424
-              nomeReceita:
-                type: string
-                example: "Limber - API - Visitantes"
-              estabelec:
-                type: integer
-                example: 1349
-              nomeEstabelec:
-                type: string
-                example: "Bilheteria - API - Limber"
-              valor:
-                type: number
-                example: 0.11
-              valorContribFundo:
-                type: number
-                nullable: true
-                example: null
-              evento:
-                type: boolean
-                example: false
-              dataEvento:
-                type: string
-                format: date-time
-                nullable: true
-                example: null
-              dataIniCalendario:
-                type: string
-                format: date-time
-                nullable: true
-                example: null
-              ordemReceita:
-                type: integer
-                example: 0
+
+    Receita:
+      type: object
+      description: Detalhes específicos de uma receita/serviço dentro de um ingresso.
+      properties:
+        idReceita:
+          type: integer
+          format: int32
+          description: Identificador da receita/serviço.
+          example: 101
+        valor:
+          type: number
+          format: float
+          description: Valor da receita.
+          example: 50.00
+        dataVisita:
+          type: string
+          format: date
+          description: Data da visita ou uso da receita/serviço.
+          example: "2000-01-01"
+        localEmbarque:
+          type: integer
+          format: int32
+          description: Código do local de embarque (se aplicável).
+          example: 1
+        temporada:
+          type: integer
+          format: int32
+          description: Código da temporada (se aplicável).
+          example: 5
+        horarioStr:
+          type: string
+          description: Horário do serviço como string (exemplo, "00:01 - 14:00").
+          example: "00:01 - 14:00"
+        progHorario:
+          type: integer
+          format: int32
+          description: Código do horário de programação.
+          example: 1
+        progSeq:
+          type: integer
+          format: int32
+          description: Sequência da programação.
+          example: 1
+        idiomaEscolhido:
+          type: string
+          description: Idioma escolhido para o serviço.
+          example: "PT"
+        sessao:
+          type: integer
+          format: int32
+          description: Número da sessão (se aplicável).
+          example: 1
+        poltrona:
+          type: integer
+          format: int32
+          description: Número da poltrona/assento (se aplicável).
+          example: 15
+        placa:
+          type: string
+          description: Placa do veículo (se aplicável).
+          example: "ABC1234"
 
     SKUItem:
       type: object
@@ -524,66 +546,231 @@ components:
 
     ReservaItem:
       type: object
+      description: Item de ingresso individual dentro da reserva.
+      required:
+        - seq
+        - sku
+        - idCategoria
+        - valorUnitario
       properties:
         seq:
           type: integer
+          format: int32
+          description: Sequência do item na lista de ingressos (começa em 0 ou 1).
           example: 1
+        idPais:
+          type: integer
+          format: int32
+          description: ID do país do visitante.
+          example: 1
+        uf:
+          type: string
+          description: Unidade Federativa (estado) do visitante (se Brasil).
+          example: "RJ"
         sku:
           type: integer
-          example: 123456
+          format: int32
+          description: Código do SKU (Stock Keeping Unit) do ingresso.
+          example: 12345
         idCategoria:
           type: integer
+          format: int32
+          description: ID da categoria do ingresso (exemplo, adulto, criança).
           example: 9999
         valorUnitario:
           type: number
+          format: float
+          description: Valor unitário do ingresso.
           example: 111.11
         qrCode:
           type: string
+          description: Código QR Code do ingresso (se já gerado ou pré-definido).
           example: "SFTE_0001"
+        emailVisitante:
+          type: string
+          description: E-mail do visitante do ingresso.
+          example: "visitante@example.com"
+        nomeVisitante:
+          type: string
+          description: Nome completo do visitante.
+          example: "Maria Aparecida"
+        docVisitante:
+          type: string
+          description: Documento do visitante (ex. CPF, RG).
+          example: "98765432100"
+        dataNascVisitante:
+          type: string
+          format: date
+          description: Data de nascimento do visitante.
+          example: "1990-01-01"
+        generoVisitante:
+          type: string
+          description: Gênero do visitante.
+          enum: [ "M", "F", "-", "O" ]
+          example: "F"
+        escolaridadeVisitante:
+          type: string
+          description: Escolaridade do visitante.
+          enum: [ "NAO", "FUND", "MED", "SUP", "POS" ]
+          example: "MED"
+        telefone:
+          type: string
+          description: Telefone de contato do visitante.
+          example: "21999998888"
+        convenioVisitante:
+          type: integer
+          format: int32
+          description: Código do convênio (se aplicável).
+          example: 0
+        moradorTipoDoc:
+          type: string
+          description: Tipo de documento do morador (se for ingresso para morador).
+          example: "CPF"
+        municipio:
+          type: string
+          description: Município de residência (se aplicável).
+          example: "Rio de Janeiro"
+        CEP:
+          type: string
+          description: CEP de residência (se aplicável).
+          example: "20000000"
+        IBGE:
+          type: string
+          description: Código IBGE do município.
+          example: "3304557"
+        descricaoVenda:
+          type: string
+          description: Descrição interna da venda/item.
+          example: "Ingresso Promocional"
+        descontoTag:
+          type: string
+          description: Tag de desconto aplicada (se aplicável).
+          example: "PROMO10"
+        contribFundo:
+          type: string
+          description: Código de contribuição para fundo (se aplicável).
+          example: "FUNDO01"
+        tripulanteCodigo:
+          type: integer
+          format: int32
+          description: Código do tripulante (se aplicável).
+          example: 0
+        codigoLote:
+          type: integer
+          format: int32
+          description: Código do lote do ingresso.
+          example: 0
+        qrCodeAdicional:
+          type: string
+          description: QR Code adicional para outro serviço (se aplicável).
+          example: "ADICIONAL_001"
+        receitas:
+          type: array
+          description: Lista de receitas ou serviços agregados a este ingresso.
+          items:
+            $ref: '#/components/schemas/Receita'
 
     ReservaRequest:
       type: object
+      description: Schema completo para a requisição de criação de reserva.
       required:
         - dataHora
         - totalLiquido
         - idParceiro
-        - titularNome
-        - titularDoc
+        - ingressos
       properties:
         dataHora:
           type: string
           format: date-time
+          description: Data e hora da visita/reserva.
           example: "2025-10-01T11:00:00.000"
         totalLiquido:
           type: number
+          format: float
+          description: Valor total líquido da reserva.
           example: 100.5
         idParceiro:
           type: integer
+          format: int32
+          description: ID do parceiro responsável pela venda.
           example: 1234
+        pontoVenda:
+          type: string
+          description: Identificação do ponto de venda.
+          example: "web_pdv01"
+        usuarioVenda:
+          type: string
+          description: Usuário que efetuou a venda.
+          example: "vendedor_joao"
+        meioVenda:
+          type: string
+          description: Canal de venda.
+          enum: [ "WEB", "APP", "PDV", "CALLCENTER" ]
+          example: "WEB"
+        campanhaVenda:
+          type: string
+          description: Nome ou código da campanha de venda.
+          example: "campanha_verao"
+        utm_medium:
+          type: string
+          description: Parâmetro UTM medium da venda.
+          example: "cpc"
+        utm_source:
+          type: string
+          description: Parâmetro UTM source da venda.
+          example: "facebook"
+        utm_content:
+          type: string
+          description: Parâmetro UTM content da venda.
+          example: "bannerpromo"
+        codigoPromocional:
+          type: string
+          description: Código promocional utilizado.
+          example: "DESCONTO20"
         titularNome:
           type: string
+          description: Nome completo do titular da reserva.
           example: "João da Silva"
         titularDoc:
           type: string
+          description: Documento (ex. CPF) do titular da reserva.
           example: "12345678900"
         titularEmail:
           type: string
           nullable: true
+          description: E-mail do titular da reserva.
           example: "joao@example.com"
+        titularNascimento:
+          type: string
+          format: date
+          description: Data de nascimento do titular.
+          example: "1985-05-15"
+        titularFone:
+          type: string
+          description: Telefone de contato do titular.
+          example: "21987654321"
+        idOrigem:
+          type: string
+          description: ID da origem ou sistema que gerou a reserva.
+          example: "SISTEMA_A"
         ingressos:
           type: array
+          description: Lista de ingressos incluídos na reserva.
           items:
             $ref: '#/components/schemas/ReservaItem'
 
     ReservaResponse:
       type: object
+      description: Schema para a resposta após a criação da reserva.
       properties:
         localizador:
           type: string
-          example: " LB123456789"
+          description: Código localizador da reserva.
+          example: "LB123456789"
         idVenda:
           type: string
-          example: 123456789
+          description: ID interno da venda gerada.
+          example: "123456789"
 
     QrCodeReadResponse:
       type: object
@@ -707,6 +894,9 @@ paths:
       security:
         - bearerAuth: []
       requestBody:
+        description: 
+          0 Para trazer as informações de todos os SKUs, ou o codigo de um específico para retornar apenas os dados desse
+
         required: true
         content:
           application/json:
@@ -1278,6 +1468,24 @@ paths:
         - bearerAuth: []
       description: |
         Faz uma reserva de ingressos (gera localizador). Normalmente válida por ~15 Minutos.
+
+        ### Código dos campos de coletas de dados:
+        - 1: nomeVisitante 
+        - 2: nomeVisitante **obrigatorio**
+        - 3: docVisitante
+        - 4: docVisitante **obrigatorio**
+        - 5: dataNascVisitante
+        - 6: dataNascVisitantento **obrigatorio**
+        - 7: fotoVisitante
+        - 8: fotoVisitante **obrigatorio**
+        - 9: telefone
+        - 10: telefone **obrigatorio**
+        - 12: enderecoVisitante **obrigatorio**
+        - 13: generoVisitante
+        - 14: generoVisitante **obrigatorio**
+        - 15: escolaridadeVisitante
+        - 16: escolaridadeVisitante **obrigatorio**
+
       requestBody:
         required: true
         content:
@@ -1285,18 +1493,62 @@ paths:
             schema:
               $ref: '#/components/schemas/ReservaRequest'
             example:
-              dataHora: "2025-10-01T11:00:00.000"
-              totalLiquido: 100.5
+              dataHora: "AAAA-MM-DDTHH:MM:SS.000"
+              totalLiquido: 123.5
               idParceiro: 1234
-              titularNome: "João da Silva"
+              pontoVenda: "exemplo"
+              usuarioVenda: "vendedor nome"
+              meioVenda: "WEB"
+              campanhaVenda: "campanha nome"
+              utm_medium: "cpc"
+              utm_source: "facebook"
+              utm_content: "bannerpromo"
+              codigoPromocional: "DESCONTO20"
+              titularNome: "Nome Sobrenome"
               titularDoc: "12345678900"
-              titularEmail: "joao@example.com"
+              titularEmail: "mail@example.com"
+              titularNascimento: "AAAA-MM-DD"
+              titularFone: "21987654321"
+              idOrigem: "SISTEMA_A"
               ingressos:
                 - seq: 1
-                  sku: 12345
+                  idPais: 1
+                  uf: "RJ"
+                  sku: 1234
                   idCategoria: 9999
-                  valorUnitario: 111.11
-                  qrCode: "SFTE_0001"
+                  valorUnitario: 123.11
+                  qrCode: null
+                  emailVisitante: "visitante@example.com"
+                  nomeVisitante: "Nome Sobrenome"
+                  docVisitante: "98765432100"
+                  dataNascVisitante: "AAAA-MM-DD"
+                  generoVisitante: "F"
+                  escolaridadeVisitante: "MED"
+                  telefone: "21999998888"
+                  convenioVisitante: 0
+                  moradorTipoDoc: "CPF"
+                  municipio: "Rio de Janeiro"
+                  CEP: "20000000"
+                  IBGE: "3304557"
+                  descricaoVenda: "Ingresso Promocional"
+                  descontoTag: "PROMO10"
+                  contribFundo: "FUNDO01"
+                  tripulanteCodigo: 0
+                  codigoLote: 0
+                  qrCodeAdicional: "ADICIONAL_001"
+                  receitas:
+                    - idReceita: 101
+                      valor: 50.00
+                      dataVisita: "AAAA-MM-DD"
+                      localEmbarque: 1
+                      temporada: 5
+                      horarioStr: "00:01 - 14:00"
+                      progHorario: 1
+                      progSeq: 1
+                      idiomaEscolhido: "PT"
+                      sessao: 1
+                      poltrona: 15
+                      placa: "ABC1234"
       responses:
         '200':
           description: Reserva criada (retorna localizador e ingressos)
@@ -1311,7 +1563,7 @@ paths:
                     totalLiquido: 100.5
                     ingressos:
                       - seq: 1
-                        sku: 123456
+                        sku: 1234
                         idCategoria: 9999
                         valorUnitario: 111.11
                         qrCode: "SFTE_0001"
