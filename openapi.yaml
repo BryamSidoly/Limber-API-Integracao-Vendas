@@ -1,7 +1,33 @@
 openapi: 3.0.1 
-info: 
-  title: Limber Cross API - Integração de Vendas (Pública) 
-  version: "2.0" 
+info:
+  title: Limber Cross API - Integração de Vendas (Pública)
+  version: "2.0"
+  description: |
+    Esta API permite a integração de vendas com a plataforma Limber via API.
+
+    ## Informações Gerais
+    - Esta documentação esta referenciada para testes. Para produção troque "testescard" por "card"
+    - Todos os endpoints (exceto autenticação) exigem um token JWT válido no cabeçalho `Authorization: Bearer {token}`.
+
+    ## Fluxo:
+    - **1** – Autenticação
+    - **2** – Consulta SKU pelo idParceiro do Auth
+    - **3** – Consulta de calendario (Geral ou do Ingresso)
+    - **4** – Consulta de estoque do SKU (Estoque ou Estoque agrupado)
+    - **5** – Consulta de preço do SKU
+    - **6** – Reserva
+    - **7** – Confirmação(Pagamento)/Inutlização:
+      - **7.1** – Inutlização
+      - **7.2** – Confirmação:
+        - **7.2.1** – Pagamento manual
+        - **7.2.2** – Pagamento na adquirente
+        - **7.2.3** – Gerar link de agameto
+    - **8** – Pedido de cancelamento
+    - **8** – Cancelamento:
+      - **8.1** – Cancelamento manual
+      - **8.2** – Cancelamentona adquirente
+      - **8.2.1** – Verificar cancelamento na adquirente
+
 servers: 
 - url: https://testescard.limbersoftware.com.br
   description: Ambiente de testes (padrão)
@@ -1319,6 +1345,220 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/UnauthorizedInvalid'
+
+  /api/pagamentos/cancelamento/manual:
+    post:
+      tags:
+        - Cancelamento
+      summary: Cancelamento Manual
+      security:
+        - bearerAuth: []
+      description: |
+        ETAPA 1: Faz o pedido de cancelamento de um ou mais itens dentro da mesma venda.
+        Pode ser utilizado mais de uma vez apenas com ingressos que estão aprovados.
+        Não pode ser feito com itens lidos (qrCodes).
+
+        *Cada pedido de cancelamento gera uma Sequência (seq) com os itens da venda dentro.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                motivo:
+                  type: string
+                  example: "Solicitado pelo cliente"
+                itens:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      sequencia:
+                        type: integer
+                        example: 1
+                gera_credito: 
+                  type: string
+                  example: false
+                pagamentos:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      sequencia:
+                        type: integer
+                        example: 1
+            
+      responses:
+        '200':
+          description: Pedido de cancelamento realizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  venda:
+                    type: number
+                    example: 48831772
+                  itensAtualizados:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        sequencia:
+                          type: number
+                          example: 1
+                        cancelamentos_codigo:
+                          type: array
+                          items:
+                            type: number
+                            example: 1
+
+  /api/pagamentos/cancelamento/cancelarAdquirente:
+      post:
+        tags:
+          - Cancelamento
+        summary: Cancelar uma reserva pelo adquirente
+        security:
+          - bearerAuth: []
+        description: |
+          ETAPA 1: Faz o pedido de cancelamento de um ou mais itens dentro da mesma venda.
+          Pode ser utilizado mais de uma vez apenas com ingressos que estão aprovados.
+          Não pode ser feito com itens lidos (qrCodes).
+
+          *Cada pedido de cancelamento gera uma Sequência (seq) com os itens da venda dentro.
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  motivo:
+                    type: string
+                    example: "Solicitado pelo cliente"
+                  itens:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        sequencia:
+                          type: integer
+                          example: 1
+                  gera_credito: 
+                    type: string
+                    example: false
+                  pagamentos:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        sequencia:
+                          type: integer
+                          example: 1
+              
+        responses:
+          '200':
+            description: Pedido de cancelamento realizado
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    venda:
+                      type: number
+                      example: 48831772
+                    itensAtualizados:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          sequencia:
+                            type: number
+                            example: 1
+                          cancelamentos_codigo:
+                            type: array
+                            items:
+                              type: number
+                              example: 1
+              
+          '400':
+            $ref: '#/components/responses/BadRequest'
+          '401':
+            $ref: '#/components/responses/UnauthorizedInvalid'
+
+  /api/pagamentos/cancelamento/confirmaDevolucaoAdquirente:
+      patch:
+        tags:
+          - Cancelamento
+        summary: Verificar cancelamento com adquirente
+        security:
+          - bearerAuth: []
+        description: |
+          ETAPA 1: Faz o pedido de cancelamento de um ou mais itens dentro da mesma venda.
+          Pode ser utilizado mais de uma vez apenas com ingressos que estão aprovados.
+          Não pode ser feito com itens lidos (qrCodes).
+
+          *Cada pedido de cancelamento gera uma Sequência (seq) com os itens da venda dentro.
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  motivo:
+                    type: string
+                    example: "Solicitado pelo cliente"
+                  itens:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        sequencia:
+                          type: integer
+                          example: 1
+                  gera_credito: 
+                    type: string
+                    example: false
+                  pagamentos:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        sequencia:
+                          type: integer
+                          example: 1
+              
+        responses:
+          '200':
+            description: Pedido de cancelamento realizado
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    venda:
+                      type: number
+                      example: 48831772
+                    itensAtualizados:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          sequencia:
+                            type: number
+                            example: 1
+                          cancelamentos_codigo:
+                            type: array
+                            items:
+                              type: number
+                              example: 1
+              
+          '400':
+            $ref: '#/components/responses/BadRequest'
+          '401':
+            $ref: '#/components/responses/UnauthorizedInvalid'
 
 externalDocs:
   description: Informações de erros e uso
