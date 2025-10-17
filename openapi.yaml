@@ -663,7 +663,7 @@ paths:
     post:
       tags:
         - Autenticação
-      summary: Autenticação (gera token e idParceiro)
+      summary: Autenticação - gera token e retorna o(s) idParceiro(s)
       requestBody:
         required: true
         content:
@@ -675,7 +675,7 @@ paths:
               senha: "Software"
       responses:
         '200':
-          description: Autenticação bem-sucedida (retorna token e parceiros)
+          description: Autenticação bem-sucedida (utilize esse token para as outras requisições)
           content:
             application/json:
               schema:
@@ -1204,23 +1204,41 @@ paths:
               properties:
                 data:
                   type: string
+                  format: date
+                  example: AAAA-MM-DD
+                  description: Data inicial da consulta
                 dataFim:
                   type: string
+                  format: date
+                  example: AAAA-MM-DD
+                  description: Data final da consulta
                 sku:
                   type: integer
+                  example: 1234
+                  description: Código do SKU
                 receita:
                   type: integer
+                  example: 4321
+                  description: Código da receita
                 idparceiro:
+                  example: 123
                   type: integer
+                  description: ID do parceiro
                 localembarque:
                   type: integer
+                  example: 1
+                  description: Local de embarque do SKU
                 sessao:
+                  example: 1
                   type: integer
-            example:
-              data: "AAAA-MM-DDTHH:MM:SS.000Z"
-              sku: 1234
-              idparceiro: 0
-              meioVenda: "WEB"
+                  description: Sessão da venda do SKU
+              required:
+                - data
+                - dataFim
+                - sku
+                - receita
+                - idparceiro
+
       responses:
         '200':
           description: Preço e categorias do SKU
