@@ -1824,6 +1824,8 @@ paths:
                       idCategoria: 9999
                       valorUnitario: 111.11
                       qrCode: SFTE_0001
+
+                      
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1879,28 +1881,22 @@ paths:
         $ref: '#/components/responses/BadRequest'
       '401':
         $ref: '#/components/responses/UnauthorizedInvalid'
+
   /api/cross/confirmacao:
     post:
       tags:
-      - Reserva/Venda
+        - Reserva/Venda
       summary: Confirmação / Transforma reserva em venda
       security:
-      - bearerAuth: []
-      description: 'Confirma uma reserva e registra a venda. É necessário ter um localizador
-        válido.
-
+        - bearerAuth: []
+      description: >
+        Confirma uma reserva e registra a venda. É necessário ter um localizador válido.
 
         ### Código da forma de pagamento:
-
-        - **1** - ''CARTAO''
-
-        - **2** - ''A FATURAR''
-
-        - **3** - ''PIX''
-
-        - **4** - ''DINHEIRO''
-
-        '
+        - **1** - 'CARTAO'
+        - **2** - 'A FATURAR'
+        - **3** - 'PIX'
+        - **4** - 'DINHEIRO'
       requestBody:
         required: true
         content:
@@ -1910,47 +1906,78 @@ paths:
               properties:
                 localizador:
                   type: string
+                  description: Código localizador da reserva a ser confirmada.
                   example: LB03215488
                 idParceiro:
                   type: integer
+                  description: Identificador do parceiro responsável pela transação.
                   example: 123
                 formaPag:
                   type: integer
+                  description: Código da forma de pagamento utilizada.
                   example: 1
                 cartaoBandeira:
                   type: string
+                  description: Bandeira do cartão utilizado, se aplicável.
                   example: MASTERCARD
                 cartaoNSU:
                   type: integer
+                  description: Número sequencial único (NSU) da transação.
                   example: 12345678
                 cartaoAutorizacao:
                   type: string
+                  description: Código de autorização da transação com o cartão.
                   example: AUTH1234
                 parcelas:
                   type: integer
+                  description: Quantidade de parcelas do pagamento.
                   example: 3
                 comprovantePagamento:
                   type: string
+                  description: Código ou hash de comprovação de pagamento.
                   example: abcD1234
                 dataHoraAutorizacao:
                   type: string
                   format: date-time
-                  example: AAAA-MM-DDTHHH:MM:SS.000Z
+                  description: Data e hora da autorização do pagamento.
+                  example: 2025-10-24T15:30:00.000Z
               required:
-              - localizador
-              - idParceiro
-              - formaPag
+                - localizador
+                - idParceiro
+                - formaPag
       responses:
         '200':
-          description: Reserva confirmada e transformada em venda
+          description: Reserva confirmada e transformada em venda.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ReservaResponse'
+                type: array
+                description: Lista de itens confirmados e vinculados à venda.
+                items:
+                  type: object
+                  properties:
+                    sku:
+                      type: integer
+                      description: Código SKU do produto confirmado.
+                      example: 4671
+                    seq:
+                      type: integer
+                      description: Número sequencial do item dentro da reserva.
+                      example: 1
+                    idcategoria:
+                      type: integer
+                      description: Identificador da categoria associada ao item.
+                      example: 3831
+                    qrcode:
+                      type: string
+                      description: Código QR gerado para identificação ou acesso ao item.
+                      example: API35110399636
+
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/UnauthorizedInvalid'
+
   /api/cross/remarcacao:
     post:
       tags:
@@ -2025,7 +2052,7 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/UnauthorizedInvalid'
-  /api/cross/leitura/qrCode/{QrCode}:
+  /api/cross/leitura/qrCode/:
     patch:
       tags:
         - Leitura/Utilização
@@ -2064,60 +2091,274 @@ paths:
           $ref: '#/components/responses/BadRequest'
 
   /api/cross/leitura/estorno:
-      patch:
-        tags:
-          - Leitura/Utilização
-        summary: Desfaz a leitura do QR code
-        security:
-          - bearerAuth: []
-        requestBody:
-          required: true
+    patch:
+      tags:
+        - Leitura/Utilização
+      summary: Desfaz a leitura do QR code
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                receita:
+                  type: integer
+                  description: Receita do QR code
+                  example: 1234
+                infoTerminalLeitura:
+                  type: string
+                  description: Nome do terminal que foi lido/devolvido
+                  example: "Catraca tal"
+                idparceiro:
+                  type: integer
+                  description: Parceiro que está fazendo a integração
+                  example: 123
+                qrcode:
+                  type: string
+                  description: QR code para a leitura ser desfeita
+                  example: "ABC1234567891011"
+              required:
+                - receita
+                - infoTerminalLeitura
+                - idparceiro
+                - qrcode
+      responses:
+        '200':
+          description: Lista de vendas / itens correspondentes
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  receita:
-                    type: integer
-                    description: Receita do QR code
-                    example: 1234
-                  infoTerminalLeitura:
-                    type: string
-                    description: Nome do terminal que foi lido/devolvido
-                    example: "Catraca tal"
-                  idparceiro:
-                    type: integer
-                    description: Parceiro que está fazendo a integração
-                    example: 123
-                  qrcode:
-                    type: string
-                    description: QR code para a leitura ser desfeita
-                    example: "ABC1234567891011"
-                required:
-                  - receita
-                  - infoTerminalLeitura
-                  - idparceiro
-                  - qrcode
-        responses:
-          '200':
-            description: Lista de vendas / itens correspondentes
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/UtilizacaoItem'
-                example:
-                  - codigo: 1234
-                    status: X
-                    statusDesc: Inutilizada (Não confirmou o Pagamento)
+                type: array
+                items:
+                  $ref: '#/components/schemas/UtilizacaoItem'
+              example:
+                - codigo: 1234
+                  status: X
+                  statusDesc: Inutilizada (Não confirmou o Pagamento)
+                  itens:
+                    - sequencia: 1
+                      qrCode: LMBR_393365650
+                      bilhete: Passe Comunidade Foz do Iguaçu
+                      categoria: Adulto
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedInvalid'
+
+  /api/cross/utilizacao:
+    get:
+      tags:
+        - Leitura/Utilização
+      summary: Consulta de Vendas por utilização, leituras ou data de visita
+      description: >
+        Endpoint para consultar vendas e suas respectivas utilizações, filtrando por parceiro, data de visita ou horário de uso/leitura.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: idParceiro
+          in: query
+          required: true
+          description: ID do parceiro que está realizando a consulta.
+          schema:
+            type: integer
+            example: 123
+        - name: dataHoraUso
+          in: query
+          required: false
+          description: Data e hora da utilização no formato ISO (AAAA-MM-DDTHH:MM:SS.000Z).
+          schema:
+            type: string
+            format: date-time
+            example: "2025-10-24T15:42:38.188Z"
+        - name: dataVisita
+          in: query
+          required: false
+          description: Data da visita (AAAA-MM-DD).
+          schema:
+            type: string
+            format: date
+            example: "2025-10-24"
+        - name: dataHoraLeitura
+          in: query
+          required: false
+          description: Data e hora da leitura do QR Code (AAAA-MM-DDTHH:MM:SS.000Z).
+          schema:
+            type: string
+            format: date-time
+            example: "2025-10-24T15:42:38.188Z"
+
+      responses:
+        '200':
+          description: Lista de vendas e itens correspondentes à pesquisa.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    codigo:
+                      type: integer
+                      description: Código da venda.
+                      example: 48916574
+                    status:
+                      type: string
+                      description: Código do status da venda.
+                      example: "A"
+                    statusDesc:
+                      type: string
+                      description: Descrição do status da venda.
+                      example: "Aprovada"
+                    idOrigem:
+                      type: integer
+                      nullable: true
+                      description: Identificador da origem, caso exista.
+                      example: null
                     itens:
-                      - sequencia: 1
-                        qrCode: LMBR_393365650
-                        bilhete: Passe Comunidade Foz do Iguaçu
-                        categoria: Adulto
-          '400':
-            $ref: '#/components/responses/BadRequest'
+                      type: array
+                      description: Lista de itens vinculados à venda.
+                      items:
+                        type: object
+                        properties:
+                          sequencia:
+                            type: integer
+                            description: Sequência do item na venda.
+                            example: 1
+                          qrCode:
+                            type: string
+                            description: Código QR gerado para o item.
+                            example: "API35110399636"
+                          bilhete:
+                            type: string
+                            description: Tipo de bilhete.
+                            example: "Atrativos"
+                          categoria:
+                            type: string
+                            description: Categoria do ingresso.
+                            example: "API - Adulto 2222"
+                          receitas:
+                            type: array
+                            description: Receitas vinculadas ao item.
+                            items:
+                              type: object
+                              properties:
+                                idReceita:
+                                  type: integer
+                                  description: Identificador da receita.
+                                  example: 3419
+                                nomeReceita:
+                                  type: string
+                                  description: Nome da receita.
+                                  example: "Limber - API - Atrativos"
+                                preco:
+                                  type: number
+                                  format: float
+                                  description: Preço da receita.
+                                  example: 59.5
+                                dataVisita:
+                                  type: string
+                                  format: date-time
+                                  description: Data da visita.
+                                  example: "2025-10-24T00:00:00.000Z"
+                                dataVisitaFinal:
+                                  type: string
+                                  format: date-time
+                                  nullable: true
+                                  description: Data final da visita, se houver.
+                                  example: null
+                                horarioStr:
+                                  type: string
+                                  description: Faixa de horário permitida para utilização.
+                                  example: "08:00-18:00"
+                                temporada:
+                                  type: integer
+                                  description: Código da temporada.
+                                  example: 46710001
+                                localDeEmbarque:
+                                  type: string
+                                  nullable: true
+                                  description: Local de embarque, se aplicável.
+                                  example: null
+                                usoDataHora:
+                                  type: string
+                                  format: date-time
+                                  nullable: true
+                                  description: Data e hora em que a utilização ocorreu.
+                                  example: "2025-10-24T15:42:38.188Z"
+                                usoTerminal:
+                                  type: string
+                                  nullable: true
+                                  description: Nome do terminal utilizado.
+                                  example: "CARD"
+                                utilizacoes:
+                                  type: array
+                                  description: Lista de utilizações realizadas para a receita.
+                                  items:
+                                    type: object
+                                    properties:
+                                      idLeitura:
+                                        type: integer
+                                        description: Identificador da leitura.
+                                        example: 1
+                                      usoDataHora:
+                                        type: string
+                                        format: date-time
+                                        description: Data e hora da leitura.
+                                        example: "2025-10-24T15:42:38.188Z"
+                                      usoTerminal:
+                                        type: string
+                                        description: Nome do terminal que realizou a leitura.
+                                        example: "CARD"
+              example:
+                - codigo: 48916574
+                  status: "A"
+                  statusDesc: "Aprovada"
+                  idOrigem: null
+                  itens:
+                    - sequencia: 1
+                      qrCode: "API35110399636"
+                      bilhete: "Atrativos"
+                      categoria: "API - Adulto 2222"
+                      receitas:
+                        - idReceita: 3419
+                          nomeReceita: "Limber - API - Atrativos"
+                          preco: 59.5
+                          dataVisita: "2025-10-24T00:00:00.000Z"
+                          dataVisitaFinal: null
+                          horarioStr: "08:00-18:00"
+                          temporada: 46710001
+                          localDeEmbarque: null
+                          usoDataHora: "2025-10-24T15:42:38.188Z"
+                          usoTerminal: "CARD"
+                          utilizacoes:
+                            - idLeitura: 1
+                              usoDataHora: "2025-10-24T15:42:38.188Z"
+                              usoTerminal: "CARD"
+                    - sequencia: 2
+                      qrCode: "API95690329820"
+                      bilhete: "Atrativos"
+                      categoria: "API - Adulto 2222"
+                      receitas:
+                        - idReceita: 3419
+                          nomeReceita: "Limber - API - Atrativos"
+                          preco: 59.5
+                          dataVisita: "2025-10-24T00:00:00.000Z"
+                          dataVisitaFinal: null
+                          horarioStr: "08:00-18:00"
+                          temporada: 46710001
+                          localDeEmbarque: null
+                          usoDataHora: null
+                          usoTerminal: null
+                          utilizacoes: []
+
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedInvalid'
+
   /api/cross/pedidoCancelamento/{{idVenda}}:
     post:
       tags:
