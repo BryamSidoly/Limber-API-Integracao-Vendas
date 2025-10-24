@@ -1,78 +1,59 @@
-openapi: 3.0.1 
+openapi: 3.0.1
 info:
-  title: Limber Cross API - Integração de Vendas (Pública)
-  version: "2.0"
-  description: |
-    A API permite a integração de vendas com a plataforma Limber via API.
-
-    ## Informações Gerais
-    - A documentação esta referenciada para testes. Em produção troque "testescard" por "card".
-    - Todos os endpoints (exceto autenticação) exigem um token JWT válido no cabeçalho `Authorization: Bearer {token}`.
-
-    ## Fluxo:
-    - **1** – Autenticação
-    - **2** – Consulta SKU
-    - **3** – Consulta de calendario (Geral ou do Ingresso)
-    - **4** – Consulta de estoque do SKU (Estoque ou Estoque agrupado)
-    - **5** – Consulta de preço do SKU
-    - **6** – Reserva
-    - **7** – Confirmação (Pagamento/Inutlização):
-      - **7.1** – Inutilização
-      - **7.2** – Confirmação:
-        - **7.2.1** – Pagamento manual
-        - **7.2.2** – Pagamento na adquirente
-        - **7.2.3** – Gerar link de pagameto
-    - **8** - Remarcação
-    - **9** – Pedido de cancelamento
-    - **10** – Cancelamento:
-      - **10.1** – Cancelamento manual
-      - **10.2** – Cancelamentona adquirente
-      - **10.2.1** – Verificar cancelamento na adquirente
-
-servers: 
+  title: Limber Cross API - Integração de Vendas
+  version: '2.0'
+  description: "A API permite a integração de vendas com a plataforma Limber via API.\n\
+    \n## Informações Gerais\n- A documentação esta referenciada para testes. Em produção\
+    \ troque \"testescard\" por \"card\".\n- Todos os endpoints (exceto autenticação)\
+    \ exigem um token JWT válido no cabeçalho `Authorization: Bearer {token}`.\n\n\
+    ## Fluxo:\n- **1** – Autenticação\n- **2** – Consulta SKU\n- **3** – Consulta\
+    \ de calendario (Geral ou do Ingresso)\n- **4** – Consulta de estoque do SKU (Estoque\
+    \ ou Estoque agrupado)\n- **5** – Consulta de preço do SKU\n- **6** – Reserva\n\
+    - **7** – Confirmação (Pagamento/Inutlização):\n  - **7.1** – Inutilização\n \
+    \ - **7.2** – Confirmação:\n    - **7.2.1** – Pagamento manual\n    - **7.2.2**\
+    \ – Pagamento na adquirente\n    - **7.2.3** – Gerar link de pagameto\n- **8**\
+    \ - Remarcação\n- **9** – Pedido de cancelamento\n- **10** – Cancelamento:\n \
+    \ - **10.1** – Cancelamento manual\n  - **10.2** – Cancelamentona adquirente\n\
+    \  - **10.2.1** – Verificar cancelamento na adquirente\n"
+servers:
 - url: https://testescard.limbersoftware.com.br
   description: Ambiente de testes (padrão)
-
 tags:
-  - name: Autenticação
-    description: Endpoints para login e obtenção de token
-  - name: Consultas
-    description: Rotas para consulta de SKUs, disponibilidade e preços
-  - name: Reserva/Venda
-    description: Criação de reservas / integração de vendas
-  - name: Leitura/Utilização
-    description: QRCode e consultas de utilização
-
+- name: Autenticação
+  description: Endpoints para login e obtenção de token
+- name: Consultas
+  description: Rotas para consulta de SKUs, disponibilidade e preços
+- name: Reserva/Venda
+  description: Criação de reservas / integração de vendas
+- name: Leitura/Utilização
+  description: QRCode e consultas de utilização
 components:
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
-
   schemas:
     Error:
       type: object
       properties:
         message:
           type: string
-          example: "Campo idParceiro 123 não existe para o usuário atual"
-
+          example: Campo idParceiro 123 não existe para o usuário atual
     AuthRequest:
       type: object
       required:
-        - usuario
-        - senha
+      - usuario
+      - senha
       properties:
         usuario:
           type: string
           description: Usuário gerado pela Limber
-          example: "Limber"
+          example: Limber
         senha:
           type: string
           description: Senha gerada pela Limber
-          example: "Software"
-
+          example: Software
     AuthResponse:
       type: object
       properties:
@@ -87,19 +68,19 @@ components:
         nome:
           type: string
           description: Nome do integrador
-          example: "API ABCD"
+          example: API ABCD
         usuario:
           type: string
           description: Usuário de Login
-          example: "apireservas"
+          example: apireservas
         token:
           type: string
           description: Berer token para usar nas outras requisições
-          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
         email:
           type: string
           description: E-mail cadastrado
-          example: "apireservas"
+          example: apireservas
         parceiros:
           type: array
           items:
@@ -112,11 +93,11 @@ components:
               nomeparceiro:
                 type: string
                 description: Nome do estabelecimeto do integrador
-                example: "API - Limber"
+                example: API - Limber
               tipoparceiro:
                 type: string
                 description: Não utilizado
-                example: "IA"
+                example: IA
               pedido_de_cancelamento:
                 type: boolean
                 description: Não utilizado
@@ -138,7 +119,9 @@ components:
                 description: Não utilizado
                 example: false
               desct_central_vendas:
-                type: [string, "null"]
+                type:
+                - string
+                - 'null'
                 description: Não utilizado
                 example: null
               administrador:
@@ -153,7 +136,6 @@ components:
                 description: Se estabelecimento pode fazer remarcação
                 type: boolean
                 example: false
-
     SKUCategory:
       type: object
       properties:
@@ -162,7 +144,7 @@ components:
           example: 3831
         nomeCategoria:
           type: string
-          example: "API - Adulto 2222"
+          example: API - Adulto 2222
         descricaoCategoria:
           type: string
           nullable: true
@@ -170,7 +152,7 @@ components:
         validaIdade:
           type: string
           nullable: true
-          example: "S"
+          example: S
         idadeInicial:
           type: integer
           nullable: true
@@ -182,11 +164,11 @@ components:
         privativo:
           type: string
           nullable: true
-          example: "N"
+          example: N
         aPartirDe:
           type: string
           nullable: true
-          example: "N"
+          example: N
         valorUnitario:
           type: number
           example: 0.11
@@ -197,7 +179,7 @@ components:
         ocupaAssento:
           type: string
           nullable: true
-          example: "N"
+          example: N
         moradorLocal:
           type: boolean
           example: false
@@ -205,7 +187,10 @@ components:
           type: array
           items:
             type: integer
-          example: [1, 12, 178]
+          example:
+          - 1
+          - 12
+          - 178
         convenios:
           type: array
           items:
@@ -216,7 +201,7 @@ components:
                 example: 1
               nome:
                 type: string
-                example: "Criança"
+                example: Criança
               descricao:
                 type: string
                 nullable: true
@@ -227,7 +212,6 @@ components:
         coletaFoto:
           type: boolean
           example: true
-
     Receita:
       type: object
       description: Detalhes específicos de uma receita/serviço dentro de um ingresso.
@@ -241,12 +225,12 @@ components:
           type: number
           format: float
           description: Valor da receita.
-          example: 50.00
+          example: 50.0
         dataVisita:
           type: string
           format: date
           description: Data da visita ou uso da receita/serviço.
-          example: "2000-01-01"
+          example: '2000-01-01'
         localEmbarque:
           type: integer
           format: int32
@@ -260,7 +244,7 @@ components:
         horarioStr:
           type: string
           description: Horário do serviço como string (exemplo, "00:01 - 14:00").
-          example: "00:01 - 14:00"
+          example: 00:01 - 14:00
         progHorario:
           type: integer
           format: int32
@@ -274,7 +258,7 @@ components:
         idiomaEscolhido:
           type: string
           description: Idioma escolhido para o serviço.
-          example: "PT"
+          example: PT
         sessao:
           type: integer
           format: int32
@@ -288,8 +272,7 @@ components:
         placa:
           type: string
           description: Placa do veículo (se aplicável).
-          example: "ABC1234"
-
+          example: ABC1234
     SKUItem:
       type: object
       properties:
@@ -298,13 +281,13 @@ components:
           example: 4669
         nome:
           type: string
-          example: "Acesso ao Parque - Completo"
+          example: Acesso ao Parque - Completo
         slug:
           type: string
-          example: "acesso-ao-parque"
+          example: acesso-ao-parque
         ativo:
           type: string
-          example: "S"
+          example: S
         perfil:
           type: integer
           example: 556
@@ -339,62 +322,81 @@ components:
           type: array
           items:
             type: string
-          example: ["CARTAO","A FATURAR","PIX","DINHEIRO"]
+          example:
+          - CARTAO
+          - A FATURAR
+          - PIX
+          - DINHEIRO
         permiteInfoVisitanteDepois:
           type: string
-          example: "S"
+          example: S
         diasLimiteParaVisitantes:
           type: integer
           example: 1
         descricao:
           type: string
-          example: "Desfrute de um evento emocionante com nosso ingresso exclusivo. Entretenimento de alta qualidade, atmosfera vibrante e experiências únicas esperam por você."
+          example: Desfrute de um evento emocionante com nosso ingresso exclusivo.
+            Entretenimento de alta qualidade, atmosfera vibrante e experiências únicas
+            esperam por você.
         textoImpressao:
           type: string
-          example: "Esse ingresso é valido por pessoa, cada qr code deve ser validado individualmente"
+          example: Esse ingresso é valido por pessoa, cada qr code deve ser validado
+            individualmente
         textoImpressaoHorario:
           type: string
-          example: "Semana: 08:00 as 12 e 13:00 as 18\nFim de semana: Das 10:00 as 19:00"
+          example: 'Semana: 08:00 as 12 e 13:00 as 18
+
+            Fim de semana: Das 10:00 as 19:00'
         estabelecCad:
           type: integer
           example: 1349
         prefixoQrcode:
           type: string
-          example: "API"
+          example: API
         controlaHorarios:
           type: string
-          example: "N"
+          example: N
         controleDisp:
           type: string
-          example: "V"
+          example: V
         habilitaValorZerado:
           type: string
-          example: "S"
+          example: S
         consultaPrecosSazonais:
           type: string
-          example: "S"
+          example: S
         mostraLabelAPartirDe:
           type: string
-          example: "S"
+          example: S
         mostraHorarioFinal:
           type: string
-          example: "S"
+          example: S
         mostraVagasDisp:
           type: string
-          example: "S"
+          example: S
         mostraHorEsgotados:
           type: string
-          example: "S"
+          example: S
         coletaDadosVisitantes:
           type: array
           items:
             type: integer
-          example: [2,4,6,8,10,12,14,16]
+          example:
+          - 2
+          - 4
+          - 6
+          - 8
+          - 10
+          - 12
+          - 14
+          - 16
         coletaDadosVisitantesMoradorLocal:
           type: array
           items:
             type: integer
-          example: [2,4]
+          example:
+          - 2
+          - 4
         menorIdadeNecessitaAceiteResponsavel:
           type: boolean
           example: true
@@ -415,7 +417,7 @@ components:
             properties:
               urlImg:
                 type: string
-                example: "https://cdntestes.limbersoftware.com.br/img/bilhetes/4669/Vd2EPDCCzE.webp"
+                example: https://cdntestes.limbersoftware.com.br/img/bilhetes/4669/Vd2EPDCCzE.webp
               mostrarGaleria:
                 type: boolean
                 example: true
@@ -424,7 +426,7 @@ components:
                 example: true
               vibrantColor:
                 type: string
-                example: "#7f7f7f"
+                example: '#7f7f7f'
         locaisEmbarque:
           type: array
           items:
@@ -435,13 +437,13 @@ components:
                 example: 2
               descricao:
                 type: string
-                example: "Aberta 24h"
+                example: Aberta 24h
               confirmaCredenciamento:
                 type: string
-                example: "N"
+                example: N
               nomeLocalEmbarque:
                 type: string
-                example: "Portao Principal"
+                example: Portao Principal
               idReceita:
                 type: integer
                 example: 3424
@@ -452,10 +454,10 @@ components:
             properties:
               nome:
                 type: string
-                example: "Sessao principal"
+                example: Sessao principal
               descricao:
                 type: string
-                example: "2 em 2 horas"
+                example: 2 em 2 horas
               idReceita:
                 type: integer
                 example: 3424
@@ -472,21 +474,20 @@ components:
                 example: 1
               nome:
                 type: string
-                example: "Alta Temporada"
+                example: Alta Temporada
               preco:
                 type: number
                 example: 20
               corCalendario:
                 type: string
-                example: "#ff0000"
-
+                example: '#ff0000'
     DisponibilidadeCalendarioItem:
       type: object
       properties:
         data:
           type: string
           format: date-time
-          example: "AAAA-MM-DDTHH:MM:SS.000Z"
+          example: AAAA-MM-DDTHH:MM:SS.000Z
         temporada:
           type: integer
           example: 1
@@ -506,14 +507,13 @@ components:
                 example: 3
         corTemporada:
           type: string
-          example: "#37ff00"
+          example: '#37ff00'
         nomeTemporada:
           type: string
-          example: "Disponivel"
+          example: Disponivel
         altaProcura:
           type: string
           nullable: true
-
     DisponibilidadeEstoqueItem:
       type: object
       properties:
@@ -529,29 +529,28 @@ components:
         horaembarqueinicial:
           type: string
           format: date-time
-          example: "AAAA-MM-DDTHH:MM:SS.000Z"
+          example: AAAA-MM-DDTHH:MM:SS.000Z
         horaembarquefinal:
           type: string
           format: date-time
-          example: "AAAA-MM-DDTHH:MM:SS.000Z"
+          example: AAAA-MM-DDTHH:MM:SS.000Z
         disponivel:
           type: integer
           example: 36
         descricao:
           type: string
-          example: "<descrição da vaga>"
+          example: <descrição da vaga>
         idiomas:
           type: string
-          example: "Português"
-
+          example: Português
     ReservaItem:
       type: object
       description: Item de ingresso individual dentro da reserva.
       required:
-        - seq
-        - sku
-        - idCategoria
-        - valorUnitario
+      - seq
+      - sku
+      - idCategoria
+      - valorUnitario
       properties:
         seq:
           type: integer
@@ -566,7 +565,7 @@ components:
         uf:
           type: string
           description: Unidade Federativa (estado) do visitante (se Brasil).
-          example: "RJ"
+          example: RJ
         sku:
           type: integer
           format: int32
@@ -585,38 +584,47 @@ components:
         qrCode:
           type: string
           description: Código QR Code do ingresso (se já gerado ou pré-definido).
-          example: "SFTE_0001"
+          example: SFTE_0001
         emailVisitante:
           type: string
           description: E-mail do visitante do ingresso.
-          example: "visitante@example.com"
+          example: visitante@example.com
         nomeVisitante:
           type: string
           description: Nome completo do visitante.
-          example: "Maria Aparecida"
+          example: Maria Aparecida
         docVisitante:
           type: string
           description: Documento do visitante (ex. CPF, RG).
-          example: "98765432100"
+          example: '98765432100'
         dataNascVisitante:
           type: string
           format: date
           description: Data de nascimento do visitante.
-          example: "1990-01-01"
+          example: '1990-01-01'
         generoVisitante:
           type: string
           description: Gênero do visitante.
-          enum: [ "M", "F", "-", "O" ]
-          example: "F"
+          enum:
+          - M
+          - F
+          - '-'
+          - O
+          example: F
         escolaridadeVisitante:
           type: string
           description: Escolaridade do visitante.
-          enum: [ "NAO", "FUND", "MED", "SUP", "POS" ]
-          example: "MED"
+          enum:
+          - NAO
+          - FUND
+          - MED
+          - SUP
+          - POS
+          example: MED
         telefone:
           type: string
           description: Telefone de contato do visitante.
-          example: "21999998888"
+          example: '21999998888'
         convenioVisitante:
           type: integer
           format: int32
@@ -625,31 +633,31 @@ components:
         moradorTipoDoc:
           type: string
           description: Tipo de documento do morador (se for ingresso para morador).
-          example: "CPF"
+          example: CPF
         municipio:
           type: string
           description: Município de residência (se aplicável).
-          example: "Rio de Janeiro"
+          example: Rio de Janeiro
         CEP:
           type: string
           description: CEP de residência (se aplicável).
-          example: "20000000"
+          example: '20000000'
         IBGE:
           type: string
           description: Código IBGE do município.
-          example: "3304557"
+          example: '3304557'
         descricaoVenda:
           type: string
           description: Descrição interna da venda/item.
-          example: "Ingresso Promocional"
+          example: Ingresso Promocional
         descontoTag:
           type: string
           description: Tag de desconto aplicada (se aplicável).
-          example: "PROMO10"
+          example: PROMO10
         contribFundo:
           type: string
           description: Código de contribuição para fundo (se aplicável).
-          example: "FUNDO01"
+          example: FUNDO01
         tripulanteCodigo:
           type: integer
           format: int32
@@ -663,27 +671,26 @@ components:
         qrCodeAdicional:
           type: string
           description: QR Code adicional para outro serviço (se aplicável).
-          example: "ADICIONAL_001"
+          example: ADICIONAL_001
         receitas:
           type: array
           description: Lista de receitas ou serviços agregados a este ingresso.
           items:
             $ref: '#/components/schemas/Receita'
-
     ReservaRequest:
       type: object
       description: Schema completo para a requisição de criação de reserva.
       required:
-        - dataHora
-        - totalLiquido
-        - idParceiro
-        - ingressos
+      - dataHora
+      - totalLiquido
+      - idParceiro
+      - ingressos
       properties:
         dataHora:
           type: string
           format: date-time
           description: Data e hora da visita/reserva.
-          example: "2025-10-01T11:00:00.000"
+          example: '2025-10-01T11:00:00.000'
         totalLiquido:
           type: number
           format: float
@@ -697,68 +704,71 @@ components:
         pontoVenda:
           type: string
           description: Identificação do ponto de venda.
-          example: "web_pdv01"
+          example: web_pdv01
         usuarioVenda:
           type: string
           description: Usuário que efetuou a venda.
-          example: "vendedor_joao"
+          example: vendedor_joao
         meioVenda:
           type: string
           description: Canal de venda.
-          enum: [ "WEB", "APP", "PDV", "CALLCENTER" ]
-          example: "WEB"
+          enum:
+          - WEB
+          - APP
+          - PDV
+          - CALLCENTER
+          example: WEB
         campanhaVenda:
           type: string
           description: Nome ou código da campanha de venda.
-          example: "campanha_verao"
+          example: campanha_verao
         utm_medium:
           type: string
           description: Parâmetro UTM medium da venda.
-          example: "cpc"
+          example: cpc
         utm_source:
           type: string
           description: Parâmetro UTM source da venda.
-          example: "facebook"
+          example: facebook
         utm_content:
           type: string
           description: Parâmetro UTM content da venda.
-          example: "bannerpromo"
+          example: bannerpromo
         codigoPromocional:
           type: string
           description: Código promocional utilizado.
-          example: "DESCONTO20"
+          example: DESCONTO20
         titularNome:
           type: string
           description: Nome completo do titular da reserva.
-          example: "João da Silva"
+          example: João da Silva
         titularDoc:
           type: string
           description: Documento (ex. CPF) do titular da reserva.
-          example: "12345678900"
+          example: '12345678900'
         titularEmail:
           type: string
           nullable: true
           description: E-mail do titular da reserva.
-          example: "joao@example.com"
+          example: joao@example.com
         titularNascimento:
           type: string
           format: date
           description: Data de nascimento do titular.
-          example: "1985-05-15"
+          example: '1985-05-15'
         titularFone:
           type: string
           description: Telefone de contato do titular.
-          example: "21987654321"
+          example: '21987654321'
         idOrigem:
           type: string
           description: ID da origem ou sistema que gerou a reserva.
-          example: "SISTEMA_A"
+          example: SISTEMA_A
         ingressos:
           type: array
           description: Lista de ingressos incluídos na reserva.
           items:
             $ref: '#/components/schemas/ReservaItem'
-
     ReservaResponse:
       type: object
       description: Schema para a resposta após a criação da reserva.
@@ -766,24 +776,23 @@ components:
         localizador:
           type: string
           description: Código localizador da reserva.
-          example: "LB123456789"
+          example: LB123456789
         idVenda:
           type: string
           description: ID interno da venda gerada.
-          example: "123456789"
-
+          example: '123456789'
     QrCodeReadResponse:
       type: object
       properties:
         qrCode:
           type: string
-          example: "LMBR_393365650"
+          example: LMBR_393365650
         bilhete:
           type: string
-          example: "Passe Comunidade Foz do Iguaçu"
+          example: Passe Comunidade Foz do Iguaçu
         categoria:
           type: string
-          example: "Adulto"
+          example: Adulto
         utilizacoes:
           type: array
           items:
@@ -795,11 +804,10 @@ components:
               usoDataHora:
                 type: string
                 format: date-time
-                example: "2023-12-08T09:13:11.000Z"
+                example: '2023-12-08T09:13:11.000Z'
               usoTerminal:
                 type: string
-                example: "TERMINAL"
-
+                example: TERMINAL
     UtilizacaoItem:
       type: object
       properties:
@@ -808,10 +816,10 @@ components:
           example: 1234
         status:
           type: string
-          example: "X"
+          example: X
         statusDesc:
           type: string
-          example: "Inutilizada (Não confirmou o Pagamento)"
+          example: Inutilizada (Não confirmou o Pagamento)
         itens:
           type: array
           items:
@@ -822,14 +830,13 @@ components:
                 example: 1
               qrCode:
                 type: string
-                example: "LMBR_393365650"
+                example: LMBR_393365650
               bilhete:
                 type: string
-                example: "Passe Comunidade Foz do Iguaçu"
+                example: Passe Comunidade Foz do Iguaçu
               categoria:
                 type: string
-                example: "Adulto"
-
+                example: Adulto
   responses:
     UnauthorizedExpired:
       description: expired token
@@ -840,9 +847,10 @@ components:
             properties:
               message:
                 type: string
-                example: "expired token"
+                example: expired token
     UnauthorizedInvalid:
-      description: invalid token - Ambiente errado. Troque card por testescard ou vice-versa
+      description: invalid token - Ambiente errado. Troque card por testescard ou
+        vice-versa
       content:
         application/json:
           schema:
@@ -850,7 +858,7 @@ components:
             properties:
               message:
                 type: string
-                example: "invalid token"
+                example: invalid token
     BadRequest:
       description: Campo faltando ou formato errado
       content:
@@ -863,12 +871,11 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-
 paths:
   /api/auth:
     post:
       tags:
-        - Autenticação
+      - Autenticação
       summary: Autenticação - gera token e retorna o(s) idParceiro(s)
       requestBody:
         required: true
@@ -878,33 +885,32 @@ paths:
               $ref: '#/components/schemas/AuthRequest'
       responses:
         '200':
-          description: Autenticação bem-sucedida (utilize esse token para as outras requisições)
+          description: Autenticação bem-sucedida (utilize esse token para as outras
+            requisições)
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/AuthResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
-
   /api/cross/consulta/sku:
     post:
       tags:
-        - Consultas
+      - Consultas
       summary: Consulta de Bilhetes disponíveis para Venda
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       requestBody:
-        description: 
-          0 Para trazer as informações de todos os SKUs, ou o codigo de um específico para retornar apenas os dados desse
-
+        description: 0 Para trazer as informações de todos os SKUs, ou o codigo de
+          um específico para retornar apenas os dados desse
         required: true
         content:
           application/json:
             schema:
               type: object
               required:
-                - idParceiro
-                - sku
+              - idParceiro
+              - sku
               properties:
                 idParceiro:
                   type: integer
@@ -924,197 +930,196 @@ paths:
                 exemplo:
                   summary: Exemplo de resposta com múltiplos SKUs
                   value:
-                    - sku: 4671
-                      nome: "Atrativos"
-                      slug: "atrativos"
-                      ativo: "S"
-                      perfil: 556
-                      qtdMaxIngressos: null
-                      qtdMinIngressos: null
-                      qtdMaxIngressosTurismo: null
-                      qtdMinIngressosTurismo: null
-                      qtdMaxIngTotalCarrinho: null
-                      qtdMinIngTotalCarrinho: null
-                      configPagamento: null
-                      metodosPag:
-                        - CARTAO
-                        - A FATURAR
-                        - PIX
-                        - DINHEIRO
-                      permiteInfoVisitanteDepois: null
-                      diasLimiteParaVisitantes: null
-                      descricao: "Desfrute de um evento emocionante com nosso ingresso exclusivo..."
-                      textoImpressao: null
-                      textoImpressaoHorario: null
-                      estabelecCad: null
-                      prefixoQrcode: "API"
-                      controlaHorarios: "S"
-                      controleDisp: null
-                      controlaIdiomaHorarios: null
-                      habilitaValorZerado: null
-                      cobrancaFundo: null
-                      cobrancaFundoComecaMarcado: null
-                      nomeFundo: null
-                      consultaPrecosSazonais: null
-                      vendaSemDataVisita: null
-                      multiplasDatasVisita: null
-                      isentarUltimoDiaReserva: null
-                      maxDiasVisita: null
-                      minDiasVisita: null
-                      mostraLabelAPartirDe: null
-                      mostraHorarioFinal: null
-                      mostraVagasDisp: null
-                      mostraHorEsgotados: null
-                      nomeTermoDeAceite: null
-                      pathTermoDeAceite: null
-                      habilitaBilheteVinculado: null
-                      unicoNoCarrinho: null
-                      linkExterno: null
-                      textoEmbarque: null
-                      textoEmbarqueVoucher: null
-                      textoDataVis: null
-                      textoDataVisVoucher: null
-                      textoHoraVis: null
-                      textoHoraVisVoucher: null
-                      textoPoltrona: null
-                      textoVagao: null
-                      textoSessaoImp: null
-                      textoSessaoEc: null
-                      textoEscolhaCategorias: null
-                      duracao: null
-                      bloquearPorDuracao: "N"
-                      idiomas: []
-                      consultarDispOffline: "N"
-                      dataLimiteConsultarDisp: null
-                      tempoAntecedencia: 0
-                      escalaAutomaticaAssentos: null
-                      habilitaVendaDiasCorridos: "N"
-                      consultarPrecosCard: "S"
-                      consultarDispCard: "S"
-                      permiteLeiturasMesmoDia: "N"
-                      qtdDiasCorridos: null
-                      limiteLeiturasDiasCorridos: null
-                      dataAlertaInit: null
-                      dataAlertaFim: null
-                      alertaInic: null
-                      alertaInicCor: null
-                      alertaInicDesc: null
-                      desativaVendasBi: "N"
-                      utilizaMapaSessoes: null
-                      dataHoraVendaIniUTC: null
-                      formatedDataHoraVendaIni: null
-                      dataHoraVendaFimUTC: null
-                      formatedDataHoraVendaFim: null
-                      mostraPrecoCalendario: "S"
-                      limiteDiasParaRemarcacao: null
-                      imprimeCanhoto: null
-                      imprimeValorBilhete: null
-                      mostraNomeHome: null
-                      habilitaPaisEstado: null
-                      habilitaCEP: null
-                      coletaDadosVisitantes: []
-                      coletaDadosVisitantesMoradorLocal: []
-                      coletaApanhe: 0
-                      coletaObservacao: 0
-                      menorIdadeNecessitaAceiteResponsavel: null
-                      solicitaContatoEmergencia: null
-                      solicitaContatoEmergenciaTick: null
-                      _gerarQrCodeCripto: false
-                      _gerarQrCode: true
-                      _utilizaQrCode: true
-                      _chaveQrCode: null
-                      _grupoLotes: null
-                      _preVendaGrupo: null
-                      _preVendaDataIni: null
-                      _preVendaDataFim: null
-                      _preVendaHoraIni: null
-                      _preVendaHoraFim: null
-                      categorias:
-                        - idCategoria: 3831
-                          nomeCategoria: "API - Adulto 2222"
-                          validaIdade: null
-                          idadeInicial: null
-                          idadeFinal: null
-                          privativo: null
-                          aPartirDe: null
-                          descricaoCategoria: null
-                          valorUnitario: 15
-                          ordem: null
-                          ocupaAssento: null
-                          moradorLocal: false
-                          paises: []
-                          convenios: []
-                          coletaFoto: null
-                          receitas:
-                            - idReceita: 3419
-                              nomeReceita: "Limber - API - Atrativos"
-                              estabelec: null
-                              nomeEstabelec: null
-                              valor: 15
-                              valorContribFundo: null
-                              evento: null
-                              dataEvento: null
-                              dataIniCalendario: null
-                              ordemReceita: null
-                        - idCategoria: 3832
-                          nomeCategoria: "API - Meia Entrada 222"
-                          validaIdade: null
-                          idadeInicial: null
-                          idadeFinal: null
-                          privativo: null
-                          aPartirDe: null
-                          descricaoCategoria: null
-                          valorUnitario: 7
-                          ordem: null
-                          ocupaAssento: null
-                          moradorLocal: false
-                          paises: []
-                          convenios: []
-                          coletaFoto: null
-                          receitas:
-                            - idReceita: 3419
-                              nomeReceita: "Limber - API - Atrativos"
-                              estabelec: null
-                              nomeEstabelec: null
-                              valor: 7
-                              valorContribFundo: null
-                              evento: null
-                              dataEvento: null
-                              dataIniCalendario: null
-                              ordemReceita: null
-                      imagens:
-                        - urlImg: "https://cdntestes.limbersoftware.com.br/img/bilhetes/4671/8xwN6VlWCP.webp"
-                          resolucao: null
-                          mostrarGaleria: true
-                          mostrarHome: true
-                          linkVideo: null
-                          vibrantColor: "#7f7f7f"
-                      locaisEmbarque: []
-                      sessoes: []
+                  - sku: 4671
+                    nome: Atrativos
+                    slug: atrativos
+                    ativo: S
+                    perfil: 556
+                    qtdMaxIngressos: null
+                    qtdMinIngressos: null
+                    qtdMaxIngressosTurismo: null
+                    qtdMinIngressosTurismo: null
+                    qtdMaxIngTotalCarrinho: null
+                    qtdMinIngTotalCarrinho: null
+                    configPagamento: null
+                    metodosPag:
+                    - CARTAO
+                    - A FATURAR
+                    - PIX
+                    - DINHEIRO
+                    permiteInfoVisitanteDepois: null
+                    diasLimiteParaVisitantes: null
+                    descricao: Desfrute de um evento emocionante com nosso ingresso
+                      exclusivo...
+                    textoImpressao: null
+                    textoImpressaoHorario: null
+                    estabelecCad: null
+                    prefixoQrcode: API
+                    controlaHorarios: S
+                    controleDisp: null
+                    controlaIdiomaHorarios: null
+                    habilitaValorZerado: null
+                    cobrancaFundo: null
+                    cobrancaFundoComecaMarcado: null
+                    nomeFundo: null
+                    consultaPrecosSazonais: null
+                    vendaSemDataVisita: null
+                    multiplasDatasVisita: null
+                    isentarUltimoDiaReserva: null
+                    maxDiasVisita: null
+                    minDiasVisita: null
+                    mostraLabelAPartirDe: null
+                    mostraHorarioFinal: null
+                    mostraVagasDisp: null
+                    mostraHorEsgotados: null
+                    nomeTermoDeAceite: null
+                    pathTermoDeAceite: null
+                    habilitaBilheteVinculado: null
+                    unicoNoCarrinho: null
+                    linkExterno: null
+                    textoEmbarque: null
+                    textoEmbarqueVoucher: null
+                    textoDataVis: null
+                    textoDataVisVoucher: null
+                    textoHoraVis: null
+                    textoHoraVisVoucher: null
+                    textoPoltrona: null
+                    textoVagao: null
+                    textoSessaoImp: null
+                    textoSessaoEc: null
+                    textoEscolhaCategorias: null
+                    duracao: null
+                    bloquearPorDuracao: N
+                    idiomas: []
+                    consultarDispOffline: N
+                    dataLimiteConsultarDisp: null
+                    tempoAntecedencia: 0
+                    escalaAutomaticaAssentos: null
+                    habilitaVendaDiasCorridos: N
+                    consultarPrecosCard: S
+                    consultarDispCard: S
+                    permiteLeiturasMesmoDia: N
+                    qtdDiasCorridos: null
+                    limiteLeiturasDiasCorridos: null
+                    dataAlertaInit: null
+                    dataAlertaFim: null
+                    alertaInic: null
+                    alertaInicCor: null
+                    alertaInicDesc: null
+                    desativaVendasBi: N
+                    utilizaMapaSessoes: null
+                    dataHoraVendaIniUTC: null
+                    formatedDataHoraVendaIni: null
+                    dataHoraVendaFimUTC: null
+                    formatedDataHoraVendaFim: null
+                    mostraPrecoCalendario: S
+                    limiteDiasParaRemarcacao: null
+                    imprimeCanhoto: null
+                    imprimeValorBilhete: null
+                    mostraNomeHome: null
+                    habilitaPaisEstado: null
+                    habilitaCEP: null
+                    coletaDadosVisitantes: []
+                    coletaDadosVisitantesMoradorLocal: []
+                    coletaApanhe: 0
+                    coletaObservacao: 0
+                    menorIdadeNecessitaAceiteResponsavel: null
+                    solicitaContatoEmergencia: null
+                    solicitaContatoEmergenciaTick: null
+                    _gerarQrCodeCripto: false
+                    _gerarQrCode: true
+                    _utilizaQrCode: true
+                    _chaveQrCode: null
+                    _grupoLotes: null
+                    _preVendaGrupo: null
+                    _preVendaDataIni: null
+                    _preVendaDataFim: null
+                    _preVendaHoraIni: null
+                    _preVendaHoraFim: null
+                    categorias:
+                    - idCategoria: 3831
+                      nomeCategoria: API - Adulto 2222
+                      validaIdade: null
+                      idadeInicial: null
+                      idadeFinal: null
+                      privativo: null
+                      aPartirDe: null
+                      descricaoCategoria: null
+                      valorUnitario: 15
+                      ordem: null
+                      ocupaAssento: null
+                      moradorLocal: false
                       paises: []
-                      blocosDeTexto: []
-                      temporadas:
-                        - temporada: 1
-                          tipoReceita: null
-                          tipo_receita: null
-                          nome: "Disponível"
-                          preco: null
-                          corCalendario: "#37ff00"
-                          cor_calendario: "#37ff00"
-                      bilhetesVinculados: []
-
+                      convenios: []
+                      coletaFoto: null
+                      receitas:
+                      - idReceita: 3419
+                        nomeReceita: Limber - API - Atrativos
+                        estabelec: null
+                        nomeEstabelec: null
+                        valor: 15
+                        valorContribFundo: null
+                        evento: null
+                        dataEvento: null
+                        dataIniCalendario: null
+                        ordemReceita: null
+                    - idCategoria: 3832
+                      nomeCategoria: API - Meia Entrada 222
+                      validaIdade: null
+                      idadeInicial: null
+                      idadeFinal: null
+                      privativo: null
+                      aPartirDe: null
+                      descricaoCategoria: null
+                      valorUnitario: 7
+                      ordem: null
+                      ocupaAssento: null
+                      moradorLocal: false
+                      paises: []
+                      convenios: []
+                      coletaFoto: null
+                      receitas:
+                      - idReceita: 3419
+                        nomeReceita: Limber - API - Atrativos
+                        estabelec: null
+                        nomeEstabelec: null
+                        valor: 7
+                        valorContribFundo: null
+                        evento: null
+                        dataEvento: null
+                        dataIniCalendario: null
+                        ordemReceita: null
+                    imagens:
+                    - urlImg: https://cdntestes.limbersoftware.com.br/img/bilhetes/4671/8xwN6VlWCP.webp
+                      resolucao: null
+                      mostrarGaleria: true
+                      mostrarHome: true
+                      linkVideo: null
+                      vibrantColor: '#7f7f7f'
+                    locaisEmbarque: []
+                    sessoes: []
+                    paises: []
+                    blocosDeTexto: []
+                    temporadas:
+                    - temporada: 1
+                      tipoReceita: null
+                      tipo_receita: null
+                      nome: Disponível
+                      preco: null
+                      corCalendario: '#37ff00'
+                      cor_calendario: '#37ff00'
+                    bilhetesVinculados: []
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/UnauthorizedInvalid'
-
   /api/cross/consulta/disponibilidade/calendario:
     post:
       tags:
-        - Consultas
+      - Consultas
       summary: Consulta Disponibilidade (Calendário)
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -1122,11 +1127,11 @@ paths:
             schema:
               type: object
               required:
-                - datainicial
-                - datafinal
-                - sku
-                - idparceiro
-                - receita
+              - datainicial
+              - datafinal
+              - sku
+              - idparceiro
+              - receita
               properties:
                 datainicial:
                   type: string
@@ -1141,10 +1146,10 @@ paths:
                 idparceiro:
                   type: integer
             example:
-              datainicial: "AAAA-MM-DD"
-              datafinal: "AAAA-MM-DD"
+              datainicial: AAAA-MM-DD
+              datafinal: AAAA-MM-DD
               sku: 1234
-              meiovenda: "WEB"
+              meiovenda: WEB
               idparceiro: 123
               receita: 1234
       responses:
@@ -1158,32 +1163,31 @@ paths:
                   $ref: '#/components/schemas/DisponibilidadeCalendarioItem'
                 exemplo:
                   value:
-                    - data: "AAAA-MM-DDTHH:MM:SS.000Z"
-                      temporada: 1
-                      disponivel: 100
-                      locaisEmbarque: []
-                      corTemporada: "#37ff00"
-                      nomeTemporada: "Disponivel"
-                      altaProcura: false
-                    - data: "AAAA-MM-DDTHH:MM:SS.000Z"
-                      temporada: 1
-                      disponivel: 1000
-                      locaisEmbarque: []
-                      corTemporada: "#37ff00"
-                      nomeTemporada: "Disponivel"
-                      altaProcura: false
+                  - data: AAAA-MM-DDTHH:MM:SS.000Z
+                    temporada: 1
+                    disponivel: 100
+                    locaisEmbarque: []
+                    corTemporada: '#37ff00'
+                    nomeTemporada: Disponivel
+                    altaProcura: false
+                  - data: AAAA-MM-DDTHH:MM:SS.000Z
+                    temporada: 1
+                    disponivel: 1000
+                    locaisEmbarque: []
+                    corTemporada: '#37ff00'
+                    nomeTemporada: Disponivel
+                    altaProcura: false
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/response/UnauthorizedExpired'
-
   /api/cross/consulta/disponibilidade/calendario/geral:
     post:
       tags:
-        - Consultas
+      - Consultas
       summary: Consulta Disponibilidade Calendário Geral (por mês)
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -1191,15 +1195,14 @@ paths:
             schema:
               type: object
               required:
-                - mes
-                - idParceiro
-                - codigoec
-                - divisao
-
+              - mes
+              - idParceiro
+              - codigoec
+              - divisao
               properties:
-                mes: 
+                mes:
                   type: string
-                  example: "MM/AAAA"
+                  example: MM/AAAA
                 idParceiro:
                   type: integer
                   example: 123
@@ -1211,19 +1214,17 @@ paths:
                   example: 123
                 datafim:
                   type: date
-                  example: "AAAA-MM-DD"
+                  example: AAAA-MM-DD
                 dataini:
                   type: date
-                  example: "AAAA-MM-DDD"
-                
+                  example: AAAA-MM-DDD
             example:
-              mes: "MM/AAAA"
+              mes: MM/AAAA
               idparceiro: 123
               codigoec: 123
               divisao: 123
-              datafim: "AAAA-MM-DD"
-              dataini: "AAAA-MM-DD"
-
+              datafim: AAAA-MM-DD
+              dataini: AAAA-MM-DD
       responses:
         '200':
           description: Disponibilidade por dia do mês (formato específico por cliente)
@@ -1234,14 +1235,13 @@ paths:
                 additionalProperties: true
         '400':
           $ref: '#/components/responses/BadRequest'
-
   /api/cross/consulta/disponibilidade/estoque:
     post:
       tags:
-        - Consultas
+      - Consultas
       summary: Consulta Disponibilidade (Estoque de um SKU)
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -1249,9 +1249,9 @@ paths:
             schema:
               type: object
               required:
-                - data
-                - sku
-                - idParceiro
+              - data
+              - sku
+              - idParceiro
               properties:
                 data:
                   type: string
@@ -1272,10 +1272,10 @@ paths:
                   type: integer
                   nullable: true
             example:
-              data: "AAAA-MM-DD"
+              data: AAAA-MM-DD
               sku: 1234
               idParceiro: 123
-              meioVenda: "WEB"
+              meioVenda: WEB
       responses:
         '200':
           description: Horários com disponibilidade (array)
@@ -1287,24 +1287,23 @@ paths:
                   $ref: '#/components/schemas/DisponibilidadeEstoqueItem'
                 exemplo:
                   value:
-                    - temporada: 2
-                      prog_horario: 55
-                      prog_seq: 68
-                      horaembarqueinicial: "1970-01-01T11:20:00.000Z"
-                      horaembarquefinal: "1970-01-01T11:25:00.000Z"
-                      disponivel: 36
-                      descricao: "<descrição da vaga>"
-                      idiomas: "Português,Inglês"
+                  - temporada: 2
+                    prog_horario: 55
+                    prog_seq: 68
+                    horaembarqueinicial: '1970-01-01T11:20:00.000Z'
+                    horaembarquefinal: '1970-01-01T11:25:00.000Z'
+                    disponivel: 36
+                    descricao: <descrição da vaga>
+                    idiomas: Português,Inglês
         '400':
           $ref: '#/components/responses/BadRequest'
-
   /api/cross/consulta/disponibilidade/estoqueagrupado:
     post:
       tags:
-        - Consultas
+      - Consultas
       summary: Consulta Disponibilidade Agrupada (Estoque de um SKU)
       security:
-        - bearerAuth: []
+      - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -1331,10 +1330,10 @@ paths:
                 sessao:
                   type: integer
             example:
-              data: "AAAA-MM-DD"
+              data: AAAA-MM-DD
               sku: 1234
               idParceiro: 0
-              meiovenda: "WEB"
+              meiovenda: WEB
       responses:
         '200':
           description: Horários agrupados (array)
@@ -1359,13 +1358,13 @@ paths:
                       example: 1
                     horaembarqueinicial:
                       type: string
-                      example: "10:00:00"
+                      example: '10:00:00'
                     horaembarquefinal:
                       type: string
-                      example: "11:00:00"
+                      example: '11:00:00'
                     idiomas:
                       type: string
-                      example: "Português,Inglês"
+                      example: Português,Inglês
         '400':
           $ref: '#/components/responses/BadRequest'
 
@@ -1386,12 +1385,12 @@ paths:
                 data:
                   type: string
                   format: date
-                  example: AAAA-MM-DD
+                  example: 'AAAA-MM-DD'
                   description: Data inicial da consulta
                 dataFim:
                   type: string
                   format: date
-                  example: AAAA-MM-DD
+                  example: 'AAAA-MM-DD'
                   description: Data final da consulta
                 sku:
                   type: integer
@@ -1400,26 +1399,25 @@ paths:
                 receita:
                   type: integer
                   example: 4321
-                  description: Código da receita
+                  description: Código da receita selecionada
                 idparceiro:
+                  type: integer
                   example: 123
-                  type: integer
                   description: ID do parceiro
-                localembarque:
+                localembarque: 
+                  type: integer
+                  example: 2
+                  description: Local embarque do SKU
+                essao:
                   type: integer
                   example: 1
-                  description: Local de embarque do SKU
-                sessao:
-                  example: 1
-                  type: integer
-                  description: Sessão da venda do SKU
+                  description: Local embarque do SKU
               required:
                 - data
                 - dataFim
                 - sku
                 - receita
                 - idparceiro
-
       responses:
         '200':
           description: Preço e categorias do SKU
@@ -1430,62 +1428,130 @@ paths:
                 items:
                   type: object
                   properties:
-                    idCategoria:
-                      type: integer
-                    nomeCategoria:
+                    data:
                       type: string
-                    valorUnitario:
-                      type: number
-                    receitas:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          idReceita:
-                            type: integer
-                          nomeReceita:
-                            type: string
-                          valor:
-                            type: number
-                exemplo:
-                  value:
-                    - idCategoria: 123456
-                      nomeCategoria: "GRINGO"
-                      valorUnitario: 111.11
-                      receitas:
-                        - idReceita: 123456
-                          nomeReceita: "VILA NOVA"
-                          valor: 111.11
+                      format: date-time
+                      example: '2025-10-25T03:00:00.000Z'
+                    configPreco:
+                      type: object
+                      properties:
+                        habilitaDescontoPorCategoria:
+                          type: boolean
+                        id:
+                          type: integer
+                        descontoProgressivo:
+                          type: array
+                          items: {}
+                        categorias:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              idCategoria:
+                                type: integer
+                              nomeCategoria:
+                                type: string
+                              aPartirDe:
+                                type: boolean
+                              descricaoCategoria:
+                                type: string
+                                nullable: true
+                              valorUnitario:
+                                type: number
+                              receitas:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    idReceita:
+                                      type: integer
+                                    nomeReceita:
+                                      type: string
+                                    idReceitaBilheteBuscaPreco:
+                                      type: string
+                                      nullable: true
+                                    valor:
+                                      type: number
+                                    taxaConveniencia:
+                                      type: number
+                                      nullable: true
+                                    valorContribFundo:
+                                      type: number
+                              lote:
+                                type: object
+                                properties:
+                                  lote:
+                                    type: string
+                                  codigo:
+                                    type: integer
+                                  data_visita:
+                                    type: string
+                                    format: date-time
+                                  vagas_atuais:
+                                    type: integer
+                        valorAPartirDe:
+                          type: number
+                          nullable: true
+              example:
+                - data: "AAAA-MM-DDTHH:MM:SS.000Z"
+                  configPreco:
+                    habilitaDescontoPorCategoria: false
+                    id: 1
+                    descontoProgressivo: []
+                    categorias:
+                      - idCategoria: 1234
+                        nomeCategoria: "Nome Categoria"
+                        aPartirDe: false
+                        descricaoCategoria: null
+                        valorUnitario: 100
+                        receitas:
+                          - idReceita: 4321
+                            nomeReceita: "Nome Receita"
+                            idReceitaBilheteBuscaPreco: null
+                            valor: 100
+                            taxaConveniencia: null
+                            valorContribFundo: 0
+                        lote:
+                          lote: "EXEMPLO"
+                          codigo: 12345
+                          data_visita: "AAAA-MM-DDTHH:MM:SS.000Z"
+                          vagas_atuais: 1000
+                      - idCategoria: 1234
+                        nomeCategoria: "Nome Categoria"
+                        aPartirDe: false
+                        descricaoCategoria: "Descrição categoria"
+                        valorUnitario: 1
+                        receitas:
+                          - idReceita: 4321
+                            nomeReceita: "Nome receita 2"
+                            idReceitaBilheteBuscaPreco: null
+                            valor: 1
+                            taxaConveniencia: null
+                            valorContribFundo: 0
+                        lote:
+                          lote: "EXEMPLO"
+                          codigo: 54321
+                          data_visita: "AAAA-MM-DDTHH:MM:SS.000Z"
+                          vagas_atuais: 1000
+                    valorAPartirDe: null
         '400':
           $ref: '#/components/responses/BadRequest'
 
   /api/cross/integra/venda:
     post:
       tags:
-        - Reserva/Venda
+      - Reserva/Venda
       summary: Reserva / Integra Venda (gera localizador)
       security:
-        - bearerAuth: []
-      description: |
-        Faz uma reserva de ingressos (gera localizador). Normalmente válida por ~15 Minutos.
-
-        ### Código dos campos de coletas de dados:
-        - 1: nomeVisitante 
-        - 2: nomeVisitante **obrigatorio**
-        - 3: docVisitante
-        - 4: docVisitante **obrigatorio**
-        - 5: dataNascVisitante
-        - 6: dataNascVisitantento **obrigatorio**
-        - 7: fotoVisitante
-        - 8: fotoVisitante **obrigatorio**
-        - 9: telefone
-        - 10: telefone **obrigatorio**
-        - 12: enderecoVisitante **obrigatorio**
-        - 13: generoVisitante
-        - 14: generoVisitante **obrigatorio**
-        - 15: escolaridadeVisitante
-        - 16: escolaridadeVisitante **obrigatorio**
-
+      - bearerAuth: []
+      description: "Faz uma reserva de ingressos (gera localizador). Normalmente válida\
+        \ por ~15 Minutos.\n\n### Código dos campos de coletas de dados:\n- 1: nomeVisitante\
+        \ \n- 2: nomeVisitante **obrigatorio**\n- 3: docVisitante\n- 4: docVisitante\
+        \ **obrigatorio**\n- 5: dataNascVisitante\n- 6: dataNascVisitantento **obrigatorio**\n\
+        - 7: fotoVisitante\n- 8: fotoVisitante **obrigatorio**\n- 9: telefone\n- 10:\
+        \ telefone **obrigatorio**\n- 12: enderecoVisitante **obrigatorio**\n- 13:\
+        \ generoVisitante\n- 14: generoVisitante **obrigatorio**\n- 15: escolaridadeVisitante\n\
+        - 16: escolaridadeVisitante **obrigatorio**\n"
       requestBody:
         required: true
         content:
@@ -1493,62 +1559,62 @@ paths:
             schema:
               $ref: '#/components/schemas/ReservaRequest'
             example:
-              dataHora: "AAAA-MM-DDTHH:MM:SS.000"
+              dataHora: AAAA-MM-DDTHH:MM:SS.000
               totalLiquido: 123.5
               idParceiro: 1234
-              pontoVenda: "exemplo"
-              usuarioVenda: "vendedor nome"
-              meioVenda: "WEB"
-              campanhaVenda: "campanha nome"
-              utm_medium: "cpc"
-              utm_source: "facebook"
-              utm_content: "bannerpromo"
-              codigoPromocional: "DESCONTO20"
-              titularNome: "Nome Sobrenome"
-              titularDoc: "12345678900"
-              titularEmail: "mail@example.com"
-              titularNascimento: "AAAA-MM-DD"
-              titularFone: "21987654321"
-              idOrigem: "SISTEMA_A"
+              pontoVenda: exemplo
+              usuarioVenda: vendedor nome
+              meioVenda: WEB
+              campanhaVenda: campanha nome
+              utm_medium: cpc
+              utm_source: facebook
+              utm_content: bannerpromo
+              codigoPromocional: DESCONTO20
+              titularNome: Nome Sobrenome
+              titularDoc: '12345678900'
+              titularEmail: mail@example.com
+              titularNascimento: AAAA-MM-DD
+              titularFone: '21987654321'
+              idOrigem: SISTEMA_A
               ingressos:
-                - seq: 1
-                  idPais: 1
-                  uf: "RJ"
-                  sku: 1234
-                  idCategoria: 9999
-                  valorUnitario: 123.11
-                  qrCode: null
-                  emailVisitante: "visitante@example.com"
-                  nomeVisitante: "Nome Sobrenome"
-                  docVisitante: "98765432100"
-                  dataNascVisitante: "AAAA-MM-DD"
-                  generoVisitante: "F"
-                  escolaridadeVisitante: "MED"
-                  telefone: "21999998888"
-                  convenioVisitante: 0
-                  moradorTipoDoc: "CPF"
-                  municipio: "Rio de Janeiro"
-                  CEP: "20000000"
-                  IBGE: "3304557"
-                  descricaoVenda: "Ingresso Promocional"
-                  descontoTag: "PROMO10"
-                  contribFundo: "FUNDO01"
-                  tripulanteCodigo: 0
-                  codigoLote: 0
-                  qrCodeAdicional: "ADICIONAL_001"
-                  receitas:
-                    - idReceita: 101
-                      valor: 50.00
-                      dataVisita: "AAAA-MM-DD"
-                      localEmbarque: 1
-                      temporada: 5
-                      horarioStr: "00:01 - 14:00"
-                      progHorario: 1
-                      progSeq: 1
-                      idiomaEscolhido: "PT"
-                      sessao: 1
-                      poltrona: 15
-                      placa: "ABC1234"
+              - seq: 1
+                idPais: 1
+                uf: RJ
+                sku: 1234
+                idCategoria: 9999
+                valorUnitario: 123.11
+                qrCode: null
+                emailVisitante: visitante@example.com
+                nomeVisitante: Nome Sobrenome
+                docVisitante: '98765432100'
+                dataNascVisitante: AAAA-MM-DD
+                generoVisitante: F
+                escolaridadeVisitante: MED
+                telefone: '21999998888'
+                convenioVisitante: 0
+                moradorTipoDoc: CPF
+                municipio: Rio de Janeiro
+                CEP: '20000000'
+                IBGE: '3304557'
+                descricaoVenda: Ingresso Promocional
+                descontoTag: PROMO10
+                contribFundo: FUNDO01
+                tripulanteCodigo: 0
+                codigoLote: 0
+                qrCodeAdicional: ADICIONAL_001
+                receitas:
+                - idReceita: 101
+                  valor: 50.0
+                  dataVisita: AAAA-MM-DD
+                  localEmbarque: 1
+                  temporada: 5
+                  horarioStr: 00:01 - 14:00
+                  progHorario: 1
+                  progSeq: 1
+                  idiomaEscolhido: PT
+                  sessao: 1
+                  poltrona: 15
+                  placa: ABC1234
       responses:
         '200':
           description: Reserva criada (retorna localizador e ingressos)
@@ -1558,29 +1624,29 @@ paths:
                 $ref: '#/components/schemas/ReservaResponse'
                 sucesso:
                   value:
-                    localizador: "LMBR-20251001-ABC123"
-                    validade: "2025-10-01T12:00:00.000"
+                    localizador: LMBR-20251001-ABC123
+                    validade: '2025-10-01T12:00:00.000'
                     totalLiquido: 100.5
                     ingressos:
-                      - seq: 1
-                        sku: 1234
-                        idCategoria: 9999
-                        valorUnitario: 111.11
-                        qrCode: "SFTE_0001"
+                    - seq: 1
+                      sku: 1234
+                      idCategoria: 9999
+                      valorUnitario: 111.11
+                      qrCode: SFTE_0001
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/UnauthorizedInvalid'
-
-  /api/cross/inutilizacao:
+  /api/cross/inutilizacao: null
   post:
     tags:
-      - Reserva/Venda
+    - Reserva/Venda
     summary: Inutilização / Inutiliza Venda
     security:
-      - bearerAuth: []
-    description: |
-      Inutiliza uma reserva de ingressos e seus QRcodes.
+    - bearerAuth: []
+    description: 'Inutiliza uma reserva de ingressos e seus QRcodes.
+
+      '
     requestBody:
       required: true
       content:
@@ -1595,13 +1661,13 @@ paths:
               motivoCancelamento:
                 type: string
             required:
-              - localizador
-              - idParceiro
-              - motivoCancelamento
+            - localizador
+            - idParceiro
+            - motivoCancelamento
           example:
-            localizador: "<Localizador>"
+            localizador: <Localizador>
             idParceiro: 1234
-            motivoCancelamento: "Desistência da compra"
+            motivoCancelamento: Desistência da compra
     responses:
       '200':
         description: Reserva inutilizada
@@ -1616,28 +1682,34 @@ paths:
                   type: string
               sucesso:
                 value:
-                  localizador: "LB99999999"
-                  status: "X"
+                  localizador: LB99999999
+                  status: X
       '400':
         $ref: '#/components/responses/BadRequest'
       '401':
         $ref: '#/components/responses/UnauthorizedInvalid'
-
   /api/cross/confirmacao:
     post:
       tags:
-        - Reserva/Venda
+      - Reserva/Venda
       summary: Confirmação / Transforma reserva em venda
       security:
-        - bearerAuth: []
-      description: |
-        Confirma uma reserva e registra a venda. É necessário ter um localizador válido.
-        
+      - bearerAuth: []
+      description: 'Confirma uma reserva e registra a venda. É necessário ter um localizador
+        válido.
+
+
         ### Código da forma de pagamento:
-        - **1** - 'CARTAO'
-        - **2** - 'A FATURAR'
-        - **3** - 'PIX'
-        - **4** - 'DINHEIRO'
+
+        - **1** - ''CARTAO''
+
+        - **2** - ''A FATURAR''
+
+        - **3** - ''PIX''
+
+        - **4** - ''DINHEIRO''
+
+        '
       requestBody:
         required: true
         content:
@@ -1674,10 +1746,9 @@ paths:
                   format: date-time
                   example: AAAA-MM-DDTHHH:MM:SS.000Z
               required:
-                - localizador
-                - idParceiro
-                - formaPag
-
+              - localizador
+              - idParceiro
+              - formaPag
       responses:
         '200':
           description: Reserva confirmada e transformada em venda
@@ -1689,17 +1760,17 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/UnauthorizedInvalid'
-
-
   /api/cross/remarcacao:
     post:
       tags:
-        - Reserva/Venda
+      - Reserva/Venda
       summary: Remarcação de Reserva
       security:
-        - bearerAuth: []
-      description: |
-        Altera os dados de visita de uma reserva. Necessário que a reserva esteja com o status de pagamento "Aprovada".
+      - bearerAuth: []
+      description: 'Altera os dados de visita de uma reserva. Necessário que a reserva
+        esteja com o status de pagamento "Aprovada".
+
+        '
       requestBody:
         required: true
         content:
@@ -1763,21 +1834,26 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/UnauthorizedInvalid'
-
-  /api/cross/leitura/qrCode/{{QrCode}}:
-    get:
+  /api/cross/leitura/qrCode/{QrCode}:
+    patch:
       tags:
         - Leitura/Utilização
-      summary: Consultar dados do QrCode
+      summary: Consultar dados do QR code
       security:
         - bearerAuth: []
-      parameters:
-        - in: path
-          name: QrCode
-          required: true
-          schema:
-            type: string
-          description: QRCode completo (ex "LMBR_393365650")
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                qrCode:
+                  type: string
+                  description: QR code completo
+                  example: "ABC1234567891011"
+              required:
+                - qrCode
       responses:
         '200':
           description: Dados do ingresso e leituras
@@ -1785,81 +1861,92 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/QrCodeReadResponse'
-                exemplo:
-                  value:
-                    qrCode: "LMBR_393365650"
-                    bilhete: "Passe Comunidade Foz do Iguaçu"
-                    categoria: "Adulto"
-                    utilizacoes:
-                      - idLeitura: 11
-                        usoDataHora: "2023-12-08T09:13:11.000Z"
-                        usoTerminal: "TERMINAL"
+              example:
+                qrCode: "ABC1234567891011"
+                bilhete: "Passe Comunidade Foz do Iguaçu"
+                categoria: "Adulto"
+                utilizacoes:
+                  - idLeitura: 11
+                    usoDataHora: "2023-12-08T09:13:11.000Z"
+                    usoTerminal: "TERMINAL"
         '400':
           $ref: '#/components/responses/BadRequest'
 
-  /api/cross/utilizacao:
-    get:
-      tags:
-        - Leitura/Utilização
-      summary: Consulta de Vendas por utilização, leituras ou data de visita
-      security:
-        - bearerAuth: []
-      parameters:
-        - in: query
-          name: idParceiro
-          schema:
-            type: integer
-          description: ID do parceiro para filtrar
-        - in: query
-          name: dataHoraUso
-          schema:
-            type: string
-            description: Data e hora de utilização (ISO)
-        - in: query
-          name: dataVisita
-          schema:
-            type: string
-            description: Data de visita (ISO)
-        - in: query
-          name: dataHoraLeitura
-          schema:
-            type: string
-            description: Data/Hora da leitura do ingresso (ISO)
-      responses:
-        '200':
-          description: Lista de vendas / itens correspondentes
+  /api/cross/leitura/estorno:
+      patch:
+        tags:
+          - Leitura/Utilização
+        summary: Desfaz a leitura do QR code
+        security:
+          - bearerAuth: []
+        requestBody:
+          required: true
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/UtilizacaoItem'
-                exemplo:
-                  value:
-                    - codigo: 1234
-                      status: "X"
-                      statusDesc: "Inutilizada (Não confirmou o Pagamento)"
-                      itens:
-                        - sequencia: 1
-                          qrCode: "LMBR_393365650"
-                          bilhete: "Passe Comunidade Foz do Iguaçu"
-                          categoria: "Adulto"
-        '400':
-          $ref: '#/components/responses/BadRequest'
-
+                type: object
+                properties:
+                  receita:
+                    type: integer
+                    description: Receita do QR code
+                    example: 1234
+                  infoTerminalLeitura:
+                    type: string
+                    description: Nome do terminal que foi lido/devolvido
+                    example: "Catraca tal"
+                  idparceiro:
+                    type: integer
+                    description: Parceiro que está fazendo a integração
+                    example: 123
+                  qrcode:
+                    type: string
+                    description: QR code para a leitura ser desfeita
+                    example: "ABC1234567891011"
+                required:
+                  - receita
+                  - infoTerminalLeitura
+                  - idparceiro
+                  - qrcode
+        responses:
+          '200':
+            description: Lista de vendas / itens correspondentes
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/UtilizacaoItem'
+                example:
+                  - codigo: 1234
+                    status: X
+                    statusDesc: Inutilizada (Não confirmou o Pagamento)
+                    itens:
+                      - sequencia: 1
+                        qrCode: LMBR_393365650
+                        bilhete: Passe Comunidade Foz do Iguaçu
+                        categoria: Adulto
+          '400':
+            $ref: '#/components/responses/BadRequest'
   /api/cross/pedidoCancelamento/{{idVenda}}:
     post:
       tags:
-        - Cancelamento
+      - Cancelamento
       summary: Pedido de Cancelamento
       security:
-        - bearerAuth: []
-      description: |
-        ETAPA 1: Faz o pedido de cancelamento de um ou mais itens dentro da mesma venda.
+      - bearerAuth: []
+      description: ' ## A venda prescisa estar com o status de ao menos 1 intem como aprovado
+        ETAPA 1: Faz o pedido de cancelamento de um ou mais itens dentro
+        da mesma venda.
+
         Pode ser utilizado mais de uma vez apenas com ingressos que estão aprovados.
+
         Não pode ser feito com itens lidos (qrCodes).
 
-        *Cada pedido de cancelamento gera uma Sequência (seq) com os itens da venda dentro.
+
+        *Cada pedido de cancelamento gera uma Sequência (seq) com os itens da venda
+        dentro.
+
+        '
       requestBody:
         required: true
         content:
@@ -1869,7 +1956,7 @@ paths:
               properties:
                 motivo:
                   type: string
-                  example: "Solicitado pelo cliente"
+                  example: Solicitado pelo cliente
                 itens:
                   type: array
                   items:
@@ -1878,7 +1965,7 @@ paths:
                       sequencia:
                         type: integer
                         example: 1
-                gera_credito: 
+                gera_credito:
                   type: string
                   example: false
                 pagamentos:
@@ -1889,7 +1976,6 @@ paths:
                       sequencia:
                         type: integer
                         example: 1
-            
       responses:
         '200':
           description: Pedido de cancelamento realizado
@@ -1914,25 +2000,23 @@ paths:
                           items:
                             type: number
                             example: 1
-
-            
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/UnauthorizedInvalid'
-
   /api/pagamentos/cancelamento/manual:
     post:
       tags:
-        - Cancelamento
+      - Cancelamento
       summary: Cancelamento Manual
       security:
-        - bearerAuth: []
-      description: |
-        *PRECISA PASSAR PELA ETAPA 1
+      - bearerAuth: []
+      description: '## PRECISA PASSAR PELA ETAPA 1
+
 
         ETAPA: 2.1
 
+        '
       requestBody:
         required: true
         content:
@@ -1942,7 +2026,7 @@ paths:
               properties:
                 motivo:
                   type: string
-                  example: "Solicitado pelo cliente"
+                  example: Solicitado pelo cliente
                 itens:
                   type: array
                   items:
@@ -1951,7 +2035,7 @@ paths:
                       sequencia:
                         type: integer
                         example: 1
-                gera_credito: 
+                gera_credito:
                   type: string
                   example: false
                 pagamentos:
@@ -1962,7 +2046,6 @@ paths:
                       sequencia:
                         type: integer
                         example: 1
-            
       responses:
         '200':
           description: Pedido de cancelamento realizado
@@ -1987,150 +2070,146 @@ paths:
                           items:
                             type: number
                             example: 1
-
   /api/pagamentos/cancelamento/cancelarAdquirente:
-      post:
-        tags:
-          - Cancelamento
-        summary: Cancelar uma reserva pelo adquirente
-        security:
-          - bearerAuth: []
-        description: |
-          *PRECISA PASSAR PELA ETAPA 1
+    post:
+      tags:
+      - Cancelamento
+      summary: Cancelar uma reserva pelo adquirente
+      security:
+      - bearerAuth: []
+      description: '## PRECISA PASSAR PELA ETAPA 1
 
-          ETAPA: 2.2
 
-        requestBody:
-          required: true
+        ETAPA: 2.2
+
+        '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                motivo:
+                  type: string
+                  example: Solicitado pelo cliente
+                itens:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      sequencia:
+                        type: integer
+                        example: 1
+                gera_credito:
+                  type: string
+                  example: false
+                pagamentos:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      sequencia:
+                        type: integer
+                        example: 1
+      responses:
+        '200':
+          description: Pedido de cancelamento realizado
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  motivo:
-                    type: string
-                    example: "Solicitado pelo cliente"
-                  itens:
+                  venda:
+                    type: number
+                    example: 48831772
+                  itensAtualizados:
                     type: array
                     items:
                       type: object
                       properties:
                         sequencia:
-                          type: integer
+                          type: number
                           example: 1
-                  gera_credito: 
-                    type: string
-                    example: false
-                  pagamentos:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        sequencia:
-                          type: integer
-                          example: 1
-              
-        responses:
-          '200':
-            description: Pedido de cancelamento realizado
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    venda:
-                      type: number
-                      example: 48831772
-                    itensAtualizados:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          sequencia:
+                        cancelamentos_codigo:
+                          type: array
+                          items:
                             type: number
                             example: 1
-                          cancelamentos_codigo:
-                            type: array
-                            items:
-                              type: number
-                              example: 1
-              
-          '400':
-            $ref: '#/components/responses/BadRequest'
-          '401':
-            $ref: '#/components/responses/UnauthorizedInvalid'
-
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedInvalid'
   /api/pagamentos/cancelamento/confirmaDevolucaoAdquirente:
-      patch:
-        tags:
-          - Cancelamento
-        summary: Verificar cancelamento com adquirente
-        security:
-          - bearerAuth: []
-        description: |
-          ETAPA 3: 
+    patch:
+      tags:
+      - Cancelamento
+      summary: Verificar cancelamento com adquirente
+      security:
+      - bearerAuth: []
+      description: '## PRECISA PASSAR PELA ETAPA 2.2
 
 
-        requestBody:
-          required: true
+        ETAPA: 3
+
+        '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                motivo:
+                  type: string
+                  example: Solicitado pelo cliente
+                itens:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      sequencia:
+                        type: integer
+                        example: 1
+                gera_credito:
+                  type: string
+                  example: false
+                pagamentos:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      sequencia:
+                        type: integer
+                        example: 1
+      responses:
+        '200':
+          description: Pedido de cancelamento realizado
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  motivo:
-                    type: string
-                    example: "Solicitado pelo cliente"
-                  itens:
+                  venda:
+                    type: number
+                    example: 48831772
+                  itensAtualizados:
                     type: array
                     items:
                       type: object
                       properties:
                         sequencia:
-                          type: integer
+                          type: number
                           example: 1
-                  gera_credito: 
-                    type: string
-                    example: false
-                  pagamentos:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        sequencia:
-                          type: integer
-                          example: 1
-              
-        responses:
-          '200':
-            description: Pedido de cancelamento realizado
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    venda:
-                      type: number
-                      example: 48831772
-                    itensAtualizados:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          sequencia:
+                        cancelamentos_codigo:
+                          type: array
+                          items:
                             type: number
                             example: 1
-                          cancelamentos_codigo:
-                            type: array
-                            items:
-                              type: number
-                              example: 1
-              
-          '400':
-            $ref: '#/components/responses/BadRequest'
-          '401':
-            $ref: '#/components/responses/UnauthorizedInvalid'
-
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedInvalid'
 externalDocs:
   description: Informações de erros e uso
-  url: "https://testescard.limbersoftware.com.br"
+  url: https://testescard.limbersoftware.com.br
