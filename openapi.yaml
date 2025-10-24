@@ -893,6 +893,9 @@ paths:
                 $ref: '#/components/schemas/AuthResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedInvalid'
+
   /api/cross/consulta/sku:
     post:
       tags:
@@ -1113,6 +1116,7 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/UnauthorizedInvalid'
+
   /api/cross/consulta/disponibilidade/calendario:
     post:
       tags:
@@ -1174,11 +1178,11 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/DisponibilidadeCalendarioItem'
-               
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
-          $ref: '#/components/response/UnauthorizedExpired'
+          $ref: '#/components/responses/UnauthorizedInvalid'
+
   /api/cross/consulta/disponibilidade/calendario/geral:
     post:
       tags:
@@ -1304,9 +1308,7 @@ paths:
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
-          $ref: '#/components/response/UnauthorizedInvalid'
-        '500':
-          $ref: '#/components/response/ServerError'
+          $ref: '#/components/responses/UnauthorizedInvalid'
 
   /api/cross/consulta/disponibilidade/estoque:
     post:
@@ -1479,6 +1481,9 @@ paths:
                        
         '400':
           $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedInvalid'
+
   /api/cross/consulta/disponibilidade/estoqueagrupado:
     post:
       tags:
@@ -1549,6 +1554,8 @@ paths:
                       example: Português,Inglês
         '400':
           $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedInvalid'
 
   /api/cross/consulta/configpreco:
     post:
@@ -1718,6 +1725,8 @@ paths:
                     valorAPartirDe: null
         '400':
           $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedInvalid'
 
   /api/cross/integra/venda:
     post:
