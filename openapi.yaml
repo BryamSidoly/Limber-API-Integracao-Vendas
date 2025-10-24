@@ -493,7 +493,7 @@ components:
           example: 1
         disponivel:
           type: integer
-          example: 7
+          example: 1000
         locaisEmbarque:
           type: array
           items:
@@ -1229,10 +1229,85 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                additionalProperties: true
+                type: array
+                items:
+                  type: object
+                  properties:
+                    date:
+                      type: string
+                      format: date-time
+                    altaProcura:
+                      type: boolean
+                    temporada:
+                      type: integer
+                    disponivel:
+                      type: boolean
+                    legenda:
+                      type: object
+                      properties:
+                        texto:
+                          type: string
+                        cor:
+                          type: string
+                    bilhetes:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          sku:
+                            type: integer
+                          nome:
+                            type: string
+                          esgotado:
+                            type: boolean
+                    preco:
+                      type: number
+                      nullable: true
+                  additionalProperties: true
+              example:
+                - date: "AAAA-MM-DDTHH:MM:SS.000Z"
+                  altaProcura: false
+                  temporada: 10001
+                  disponivel: true
+                  legenda:
+                    texto: "Disponivel"
+                    cor: "#37ff00"
+                  bilhetes:
+                    - sku: 1234
+                      nome: "Atrativos"
+                      esgotado: false
+                    - sku: 4231
+                      nome: "Acesso ao Parque - Completo"
+                      esgotado: false
+                    - sku: 321
+                      nome: "Acesso ao Parque - Simples"
+                      esgotado: false
+                  preco: null
+                - date: "AAAA-MM-DDTHH:MM:DD.000Z"
+                  altaProcura: false
+                  temporada: 10001
+                  disponivel: true
+                  legenda:
+                    texto: "Disponivel"
+                    cor: "#37ff00"
+                  bilhetes:
+                    - sku: 1234
+                      nome: "Atrativos"
+                      esgotado: false
+                    - sku: 4321
+                      nome: "Acesso ao Parque - Completo"
+                      esgotado: false
+                    - sku: 321
+                      nome: "Acesso ao Parque - Simples"
+                      esgotado: false
+                  preco: null
         '400':
           $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/response/UnauthorizedInvalid'
+        '500':
+          $ref: '#/components/response/ServerError'
+
   /api/cross/consulta/disponibilidade/estoque:
     post:
       tags:
@@ -1250,49 +1325,158 @@ paths:
               - data
               - sku
               - idParceiro
+              - meioVenda
+              - reseceita
               properties:
                 data:
                   type: string
                   format: date
+                  example: AAAA-MM-DD
                 dataFim:
                   type: string
                   format: date
+                  example: AAAA-MM-DD
                 sku:
                   type: integer
+                  example: 1234
                 idParceiro:
                   type: integer
+                  example: 123
                 meioVenda:
                   type: string
-                localEmbarque:
+                  example: WEB
+                receita:
                   type: integer
-                  nullable: true
-                quantidade:
+                  example: 4321
+                sessao:
                   type: integer
-                  nullable: true
+                  example: 1
+                quantidade: 
+                  type: integer
+                  example: 0
+                localembarque:
+                  type: integer
+                  example: 1
             example:
               data: AAAA-MM-DD
               sku: 1234
               idParceiro: 123
               meioVenda: WEB
+              receita: 1234
+              sessao: 123
+              quantidade: 0
+              localEmbarque: 1
       responses:
         '200':
-          description: Horários com disponibilidade (array)
+          description: Horários com disponibilidade detalhada por dia
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/DisponibilidadeEstoqueItem'
-                exemplo:
-                  value:
-                  - temporada: 2
-                    prog_horario: 55
-                    prog_seq: 68
-                    horaembarqueinicial: '1970-01-01T11:20:00.000Z'
-                    horaembarquefinal: '1970-01-01T11:25:00.000Z'
-                    disponivel: 36
-                    descricao: <descrição da vaga>
-                    idiomas: Português,Inglês
+                  type: object
+                  properties:
+                    data:
+                      type: string
+                      format: date-time
+                      description: Data da disponibilidade
+                      example: "AAAA-MM-DDTHH:00:00.000Z"
+                    configDisp:
+                      type: array
+                      description: Lista de configurações de disponibilidade para o dia
+                      items:
+                        type: object
+                        properties:
+                          disponivel:
+                            type: integer
+                            description: Número de vagas disponíveis
+                            example: 1994
+                          vagasTotais:
+                            type: integer
+                            description: Número total de vagas
+                            example: 2000
+                          horaembarqueinicial:
+                            type: string
+                            format: time
+                            description: Hora inicial de embarque
+                            example: "06:00:00"
+                          horaembarquefinal:
+                            type: string
+                            format: time
+                            description: Hora final de embarque
+                            example: "23:59:00"
+                          descricao:
+                            type: string
+                            description: Intervalo de horários ou descrição da vaga
+                            example: "10:00 as 17:00"
+                          temporada:
+                            type: integer
+                            description: Código da temporada
+                            example: 1
+                          escolheidiomas:
+                            type: string
+                            nullable: true
+                            description: Idiomas escolhidos pelo cliente (se aplicável)
+                            example: null
+                          idiomas:
+                            type: string
+                            nullable: true
+                            description: Idiomas disponíveis
+                            example: null
+                          progseq:
+                            type: integer
+                            description: Sequência do programa
+                            example: 1
+                          proghorario:
+                            type: integer
+                            description: Código do horário do programa
+                            example: 4671
+                          somenteprivativo:
+                            type: string
+                            description: Indica se é somente privativo (S/N)
+                            example: "N"
+                          permiteprivativo:
+                            type: string
+                            description: Indica se permite privativo (S/N)
+                            example: "N"
+                          preenchevagas:
+                            type: string
+                            description: Indica se preenche vagas automaticamente (S/N)
+                            example: "N"
+                          sessoesMapa:
+                            type: string
+                            nullable: true
+                            description: Caminho ou informações do mapa das sessões
+                            example: null
+                          pathSvgComBucket:
+                            type: string
+                            nullable: true
+                            description: Caminho do SVG no bucket
+                            example: null
+                          categorias:
+                            type: array
+                            description: Lista de categorias de vagas
+                            items:
+                              type: object
+                              properties:
+                                disponivel:
+                                  type: integer
+                                  description: Número de vagas disponíveis na categoria
+                                  example: 994
+                                vagasTotais:
+                                  type: integer
+                                  description: Número total de vagas na categoria
+                                  example: 1000
+                                idCategoria:
+                                  type: integer
+                                  description: Identificador da categoria
+                                  example: 3831
+                          sessoes:
+                            type: array
+                            description: Lista de sessões detalhadas (se houver)
+                            items:
+                              type: object
+                       
         '400':
           $ref: '#/components/responses/BadRequest'
   /api/cross/consulta/disponibilidade/estoqueagrupado:
