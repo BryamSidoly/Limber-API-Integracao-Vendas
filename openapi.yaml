@@ -1738,11 +1738,16 @@ paths:
       description: "Faz uma reserva de ingressos (gera localizador). Normalmente válida\
         \ por ~15 Minutos.\n\n### Código dos campos de coletas de dados:\n- 1: nomeVisitante\
         \ \n- 2: nomeVisitante **obrigatorio**\n- 3: docVisitante\n- 4: docVisitante\
-        \ **obrigatorio**\n- 5: dataNascVisitante\n- 6: dataNascVisitantento **obrigatorio**\n\
+        \ **obrigatorio**\n- 5: dataNascVisitante\n- 6: dataNascVisitante **obrigatorio**\n\
         - 7: fotoVisitante\n- 8: fotoVisitante **obrigatorio**\n- 9: telefone\n- 10:\
         \ telefone **obrigatorio**\n- 12: enderecoVisitante **obrigatorio**\n- 13:\
         \ generoVisitante\n- 14: generoVisitante **obrigatorio**\n- 15: escolaridadeVisitante\n\
-        - 16: escolaridadeVisitante **obrigatorio**\n"
+        - 16: escolaridadeVisitante **obrigatorio**\n\n### Siglas de Escolaridade:\n\
+        - NAO: Não informado / Não se aplica\n- SEM: Sem escolaridade\n- EFI: Ensino Fundamental Incompleto\n\
+        - EFC: Ensino Fundamental Completo\n- EMI: Ensino Médio Incompleto\n- EMC: Ensino Médio Completo\n\
+        - ESI: Ensino Superior Incompleto\n- ESC: Ensino Superior Completo\n- POS: Pós-graduação\n\
+        - M/D: Mestrado/Doutorado\n- OUT: Outro / não especificado"
+
       requestBody:
         required: true
         content:
@@ -1893,10 +1898,10 @@ paths:
         Confirma uma reserva e registra a venda. É necessário ter um localizador válido.
 
         ### Código da forma de pagamento:
-        - **1** - 'CARTAO'
-        - **2** - 'A FATURAR'
-        - **3** - 'PIX'
-        - **4** - 'DINHEIRO'
+        **1**: 'CARTAO', 
+        **2**: 'A FATURAR', 
+        **3**: 'PIX', 
+        **4**: 'DINHEIRO'
       requestBody:
         required: true
         content:
