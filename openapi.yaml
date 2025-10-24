@@ -2065,28 +2065,90 @@ paths:
           application/json:
             schema:
               type: object
+              description: Dados necessários para registrar a leitura do QR code
               properties:
-                qrCode:
+                receita:
+                  type: integer
+                  description: Receita da squencia
+                  example: 3419
+                infoTerminalLeitura:
                   type: string
-                  description: QR code completo
-                  example: "ABC1234567891011"
+                  description: Informações do terminal que realizou a leitura
+                  example: "Teste API"
+                estabLeitura:
+                  type: integer
+                  description: Parceiro que realizou a leitura
+                  example: 1349
+                idparceiro:
+                  type: integer
+                  description: Id do parceiro
+                  example: 512
+                qrcode:
+                  type: string
+                  description: QR code completo a ser lido
+                  example: "API01261429924"
               required:
-                - qrCode
+                - receita
+                - infoTerminalLeitura
+                - estabLeitura
+                - idparceiro
+                - qrcode
       responses:
         '200':
           description: Dados do ingresso e leituras
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/QrCodeReadResponse'
-              example:
-                qrCode: "ABC1234567891011"
-                bilhete: "Passe Comunidade Foz do Iguaçu"
-                categoria: "Adulto"
-                utilizacoes:
-                  - idLeitura: 11
-                    usoDataHora: "2023-12-08T09:13:11.000Z"
-                    usoTerminal: "TERMINAL"
+                type: object
+                description: Informações detalhadas sobre o ingresso, visitante e categoria
+                properties:
+                  sku:
+                    type: integer
+                    description: Código do produto/ingresso
+                    example: 4671
+                  nome:
+                    type: string
+                    description: Nome do ingresso
+                    example: "Atrativos"
+                  idCategoria:
+                    type: integer
+                    description: Identificador da categoria do ingresso
+                    example: 3831
+                  nomeCategoria:
+                    type: string
+                    description: Nome da categoria do ingresso
+                    example: "API - Adulto 2222"
+                  dataVisita:
+                    type: string
+                    format: date
+                    description: Data da visita
+                    example: "2025-10-23"
+                  horarioStr:
+                    type: string
+                    description: Horário permitido para visita
+                    example: "08:00-18:00"
+                  nomeVisitante:
+                    type: string
+                    description: Nome completo do visitante
+                    example: "Sara Larissa Alves Pereira de Lima"
+                  docVisitante:
+                    type: string
+                    description: Documento do visitante (CPF)
+                    example: "100.032.084-78"
+                  permiteTolerancia:
+                    type: boolean
+                    description: Indica se a tolerância de horário é permitida
+                    example: false
+                  mensagem:
+                    type: string
+                    nullable: true
+                    description: Mensagem adicional
+                    example: null
+                  confirmaLeitura:
+                    type: boolean
+                    nullable: true
+                    description: Indica se a leitura foi confirmada
+                    example: null
         '400':
           $ref: '#/components/responses/BadRequest'
 
