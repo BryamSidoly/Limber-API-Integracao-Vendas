@@ -1136,22 +1136,35 @@ paths:
                 datainicial:
                   type: string
                   format: date
+                  example: AAAA-MM-DD
+                  description: Data de visita inicial da consulta
                 datafinal:
                   type: string
                   format: date
+                  exampe: AAAA-MM-DD
+                  description: Data de visita final da consulta
                 sku:
                   type: integer
+                  exampe: 1234
                 meiovenda:
+                  example: WEB
                   type: string
                 idparceiro:
                   type: integer
-            example:
-              datainicial: AAAA-MM-DD
-              datafinal: AAAA-MM-DD
-              sku: 1234
-              meiovenda: WEB
-              idparceiro: 123
-              receita: 1234
+                  example: 123
+                receita: 
+                  type: integer
+                  example: 1234
+                temporada: 
+                  type: integer
+                  example: 0
+                localembarque: 
+                  type: integer
+                  example: 0
+                quantidade: 
+                  type: integer
+                  example: 0
+
       responses:
         '200':
           description: Datas com disponibilidade (array)
@@ -1161,22 +1174,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/DisponibilidadeCalendarioItem'
-                exemplo:
-                  value:
-                  - data: AAAA-MM-DDTHH:MM:SS.000Z
-                    temporada: 1
-                    disponivel: 100
-                    locaisEmbarque: []
-                    corTemporada: '#37ff00'
-                    nomeTemporada: Disponivel
-                    altaProcura: false
-                  - data: AAAA-MM-DDTHH:MM:SS.000Z
-                    temporada: 1
-                    disponivel: 1000
-                    locaisEmbarque: []
-                    corTemporada: '#37ff00'
-                    nomeTemporada: Disponivel
-                    altaProcura: false
+               
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
