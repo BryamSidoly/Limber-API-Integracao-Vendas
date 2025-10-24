@@ -893,8 +893,6 @@ paths:
                 $ref: '#/components/schemas/AuthResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/UnauthorizedInvalid'
 
   /api/cross/consulta/sku:
     post:
