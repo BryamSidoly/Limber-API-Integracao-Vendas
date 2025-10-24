@@ -2151,7 +2151,7 @@ paths:
   /api/cross/utilizacao:
     get:
       tags:
-        - Leitura/Utilização
+        - Consultas
       summary: Consulta de Vendas por utilização, leituras ou data de visita
       description: >
         Endpoint para consultar vendas e suas respectivas utilizações, filtrando por parceiro, data de visita ou horário de uso/leitura.
