@@ -775,12 +775,13 @@ components:
       properties:
         localizador:
           type: string
-          description: Código localizador da reserva.
-          example: LB123456789
-        idVenda:
-          type: string
-          description: ID interno da venda gerada.
-          example: '123456789'
+          description: Localizador unico com prefixo LB
+          example: LB48917306
+        codVenda:
+          type: integer
+          description: Localizador unico sem o prefixo LB
+          example: 1
+
     QrCodeReadResponse:
       type: object
       properties:
@@ -1816,19 +1817,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ReservaResponse'
-                sucesso:
-                  value:
-                    localizador: LMBR-20251001-ABC123
-                    validade: '2025-10-01T12:00:00.000'
-                    totalLiquido: 100.5
-                    ingressos:
-                    - seq: 1
-                      sku: 1234
-                      idCategoria: 9999
-                      valorUnitario: 111.11
-                      qrCode: SFTE_0001
-
-                      
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
