@@ -1942,28 +1942,39 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                description: Lista de itens confirmados e vinculados à venda.
-                items:
-                  type: object
-                  properties:
-                    sku:
-                      type: integer
-                      description: Código SKU do produto confirmado.
-                      example: 4671
-                    seq:
-                      type: integer
-                      description: Número sequencial do item dentro da reserva.
-                      example: 1
-                    idcategoria:
-                      type: integer
-                      description: Identificador da categoria associada ao item.
-                      example: 3831
-                    qrcode:
-                      type: string
-                      description: Código QR gerado para identificação ou acesso ao item.
-                      example: API35110399636
-
+                type: object
+                description: Detalhes da venda e ingressos associados.
+                properties:
+                  localizador:
+                    type: string
+                    description: Código de identificação da reserva/venda.
+                    example: LB48917306
+                  statusvenda:
+                    type: string
+                    description: Status da venda (ex. A = Ativa, C = Cancelada).
+                    example: A
+                  ingressos:
+                    type: array
+                    description: Lista de ingressos confirmados e vinculados à venda.
+                    items:
+                      type: object
+                      properties:
+                        sku:
+                          type: integer
+                          description: Código SKU do produto confirmado.
+                          example: 4671
+                        seq:
+                          type: integer
+                          description: Número sequencial do item dentro da reserva.
+                          example: 1
+                        idcategoria:
+                          type: integer
+                          description: Identificador da categoria associada ao item.
+                          example: 3831
+                        qrcode:
+                          type: string
+                          description: Código QR gerado para identificação ou acesso ao item.
+                          example: API90316728161
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
